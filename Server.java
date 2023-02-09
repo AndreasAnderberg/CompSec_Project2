@@ -6,7 +6,7 @@ import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
-public class server implements Runnable {
+public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
 
