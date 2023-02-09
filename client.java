@@ -14,7 +14,7 @@ import java.security.cert.*;
  * the firewall by following SSLSocketClientWithTunneling.java.
  */
 
-public class client {
+public class Client {
     public static void main(String[] args) throws Exception {
         String host = null;
         int port = -1;
