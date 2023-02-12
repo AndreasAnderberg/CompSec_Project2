@@ -2,6 +2,7 @@ import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
 import java.security.cert.X509Certificate;
+import java.util.Scanner;
 import java.security.KeyStore;
 import java.security.cert.*;
 
@@ -36,7 +37,9 @@ public class Client {
         try {
             SSLSocketFactory factory = null;
             try {
-                char[] password = "password".toCharArray();
+                Scanner sc = new Scanner(System.in);
+                System.out.println("Enter Password to truststore");
+                char[] password = sc.nextLine().toCharArray();
                 KeyStore ks = KeyStore.getInstance("JKS");
                 KeyStore ts = KeyStore.getInstance("JKS");
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
@@ -50,6 +53,7 @@ public class Client {
                 tmf.init(ts); // keystore can be used as truststore here
                 ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
                 factory = ctx.getSocketFactory();
+                //sc.close();
             } catch (Exception e) {
                 throw new IOException(e.getMessage());
             }
