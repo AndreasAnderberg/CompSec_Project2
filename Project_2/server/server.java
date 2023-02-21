@@ -3,9 +3,12 @@ import java.io.*;
 import java.net.*;
 import javax.net.*;
 import javax.net.ssl.*;
+import javax.security.auth.x500.X500Principal;
+
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.Hashtable;
 
 public class server implements Runnable {
   private ServerSocket serverSocket = null;
@@ -21,11 +24,16 @@ public class server implements Runnable {
       SSLSocket socket=(SSLSocket)serverSocket.accept();
       newListener();
       SSLSession session = socket.getSession();
-      Certificate[] cert = session.getPeerCertificates();
-      String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName();
+      X509Certificate cert = (X509Certificate) session.getPeerCertificates()[0];  
+
+      //sparar role och id som strings, hämtar från certifikatet med cert.getSubjectX500Principal().getName().
+      String role = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
+      String id = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
+
       numConnectedClients++;
       System.out.println("client connected");
-      System.out.println("client name (cert subject DN field): " + subject);
+      System.out.println("client id (CN field): " + id);
+      System.out.println("client role (O field): " + role);
       System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
       PrintWriter out = null;
@@ -35,12 +43,16 @@ public class server implements Runnable {
 
       String clientMsg = null;
       while ((clientMsg = in.readLine()) != null) {
-        String rev = new StringBuilder(clientMsg).reverse().toString();
-        System.out.println("received '" + clientMsg + "' from client");
-        System.out.print("sending '" + rev + "' to client...");
-        out.println(rev);
-        out.flush();
-        System.out.println("done\n");
+        if (clientMsg.equalsIgnoreCase("test")) {
+          testAnswer(out);
+      } else {
+          String rev = new StringBuilder(clientMsg).reverse().toString();
+          System.out.println("received '" + clientMsg + "' from client");
+          System.out.print("sending '" + rev + "' to client...");
+          out.println(rev);
+          out.flush();
+          System.out.println("done\n"); 
+      }
       }
       in.close();
       out.close();
@@ -54,6 +66,10 @@ public class server implements Runnable {
       return;
     }
   }
+  private void testAnswer(PrintWriter out) {
+    out.println("testtest");
+    out.flush();
+}
   
   private void newListener() { (new Thread(this)).start(); } // calls run()
   public static void main(String args[]) {
