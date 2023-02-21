@@ -1,11 +1,9 @@
-<<<<<<< HEAD
 .metals/metals.lock.db
 .metals/metals.log
-=======
 .vscode
 .metals
 settings.json
 .log
 .db
 .mv
->>>>>>> 0a5fde4cdbb4265bafcd4e0e43dff49fa3a9dfdf
+.metadata

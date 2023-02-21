@@ -5,8 +5,8 @@ import javax.net.*;
 import javax.net.ssl.*;
 import javax.security.auth.x500.X500Principal;
 
+
 import java.security.KeyStore;
-import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Hashtable;
 
@@ -36,40 +36,15 @@ public class server implements Runnable {
       System.out.println("client role (O field): " + role);
       System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
-      PrintWriter out = null;
-      BufferedReader in = null;
-      out = new PrintWriter(socket.getOutputStream(), true);
-      in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-      String clientMsg = null;
-      while ((clientMsg = in.readLine()) != null) {
-        if (clientMsg.equalsIgnoreCase("test")) {
-          testAnswer(out);
-      } else {
-          String rev = new StringBuilder(clientMsg).reverse().toString();
-          System.out.println("received '" + clientMsg + "' from client");
-          System.out.print("sending '" + rev + "' to client...");
-          out.println(rev);
-          out.flush();
-          System.out.println("done\n"); 
-      }
-      }
-      in.close();
-      out.close();
-      socket.close();
-      numConnectedClients--;
-      System.out.println("client disconnected");
-      System.out.println(numConnectedClients + " concurrent connection(s)\n");
+      ClientHandler clientHandler = new ClientHandler(socket, role);
+      new Thread(clientHandler).start();
     } catch (IOException e) {
-      System.out.println("Client died: " + e.getMessage());
-      e.printStackTrace();
-      return;
-    }
+      System.err.println("Error in connection attempt.");
   }
-  private void testAnswer(PrintWriter out) {
-    out.println("testtest");
-    out.flush();
 }
+
+
+    
   
   private void newListener() { (new Thread(this)).start(); } // calls run()
   public static void main(String args[]) {
@@ -118,3 +93,6 @@ public class server implements Runnable {
     return null;
   }
 }
+
+
+
