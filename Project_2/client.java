@@ -35,8 +35,10 @@ public class client {
     // Initilize input varibles 
     boolean foundUser = false;
     FileInputStream inputStream = null;
-    String password; 
+    String password = null; 
     String username = null;
+    String input = null;
+    String serverRespons;
 
     // Loop until input is correct username and password
     // Using time-out
@@ -53,7 +55,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("./clientkeystore/"+ username);
+        inputStream = new FileInputStream("./clientkeystores/"+ username +"keystore");
         foundUser = true;
 
       } catch (FileNotFoundException e) {
@@ -71,6 +73,7 @@ public class client {
       keyStore = KeyStore.getInstance("JKS");
       trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
 
+
       // Load keystore using given username and password
       keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password
       keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
@@ -78,7 +81,12 @@ public class client {
       sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
 
       //Create an SSL socket for the (node) client and connect to the server
+      factory = sslContext.getSocketFactory();
       SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
+
+      // Test ....
+      System.out.println(client.getSession().getCipherSuite());
+
 
       // Set up client and start SSL handshake
       client.setUseClientMode(true);
@@ -87,21 +95,35 @@ public class client {
       System.out.print("Client: "+client);
 
       // Set up input output streams using NetworkUtility
-      PrintWriter  toServer = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
-      BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+      PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
+      BufferedReader read = new BufferedReader(new InputStreamReader(client.getInputStream()));  // Listen to server's messages
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); // Whats written in the console that will turn into a message
 
 
-      // Start read and send messages between client and server
-      
+      // Start read from server and send. End session by writing "quit"
 
 
+      /*
+       *  This part is only implemented for sending and recieving messages. 
+       *  Is not complete and doesnt apply the medical record request etc...
+       */
 
+      while((input = in.readLine()) != "quit" ) {
+        out.println(input); // print and send the input
+        System.out.println("Sent: "+input);
 
+        // Read server's response
+        serverRespons = read.readLine();
+        System.out.println("Received: " + serverRespons);
+      }
+
+      // Closes input, output and the socket in order to end the session
+      out.close();
+      in.close();
+      client.close();
 
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-
   }
 }
