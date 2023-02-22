@@ -55,7 +55,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("./clientkeystore/"+ username);
+        inputStream = new FileInputStream("./clientkeystore/"+ username +"keystore");
         foundUser = true;
 
       } catch (FileNotFoundException e) {
@@ -73,6 +73,7 @@ public class client {
       keyStore = KeyStore.getInstance("JKS");
       trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
 
+
       // Load keystore using given username and password
       keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password
       keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
@@ -81,6 +82,11 @@ public class client {
 
       //Create an SSL socket for the (node) client and connect to the server
       SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
+
+
+      // Test ....
+      System.out.println(client.getSession().getCipherSuite());
+
 
       // Set up client and start SSL handshake
       client.setUseClientMode(true);
@@ -107,10 +113,11 @@ public class client {
         System.out.println("Sent: "+input);
 
         // Read server's response
-        serverRespons = in.readLine();
+        serverRespons = read.readLine();
         System.out.println("Received: " + serverRespons);
       }
 
+      // Closes input, output and the socket in order to end the session
       out.close();
       in.close();
       client.close();
