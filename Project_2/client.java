@@ -108,8 +108,9 @@ public class client {
        *  This part is only implemented for sending and recieving messages. 
        *  Is not complete and doesnt apply the medical record request etc...
        */
-
-      while((input = in.readLine()) != "quit" ) {
+      input = "";
+      while(!input.equals("quit")) {
+        input = in.readLine();
         out.println(input); // print and send the input
         System.out.println("Sent: "+input);
 
