@@ -58,10 +58,8 @@ public class server implements Runnable {
   private void newListener() { (new Thread(this)).start(); } // calls run()
   public static void main(String args[]) {
     System.out.println("\nServer Started\n");
-    int port = -1;
-    if (args.length >= 1) {
-      port = Integer.parseInt(args[0]);
-    }
+    int port = 9876;
+
     String type = "TLSv1.2";
     try {
       ServerSocketFactory ssf = getServerSocketFactory(type);

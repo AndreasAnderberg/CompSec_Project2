@@ -55,7 +55,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("./clientkeystore/"+ username +"keystore");
+        inputStream = new FileInputStream("./clientkeystores/"+ username +"keystore");
         foundUser = true;
 
       } catch (FileNotFoundException e) {
@@ -81,8 +81,8 @@ public class client {
       sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
 
       //Create an SSL socket for the (node) client and connect to the server
+      factory = sslContext.getSocketFactory();
       SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
-
 
       // Test ....
       System.out.println(client.getSession().getCipherSuite());
