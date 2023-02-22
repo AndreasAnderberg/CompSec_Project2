@@ -24,6 +24,7 @@ public class server implements Runnable {
       SSLSocket socket=(SSLSocket)serverSocket.accept();
       newListener();
       SSLSession session = socket.getSession();
+      System.out.println((X509Certificate) session.getPeerCertificates()[0]);
       X509Certificate cert = (X509Certificate) session.getPeerCertificates()[0];  
 
       //sparar role och id som strings, hämtar från certifikatet med cert.getSubjectX500Principal().getName().
@@ -75,6 +76,9 @@ public class server implements Runnable {
   public static void main(String args[]) {
     System.out.println("\nServer Started\n");
     int port = 9876;
+    System.setProperty("javax.net.ssl.trustStore", "./server/servertruststore");
+    System.setProperty("javax.net.debug", "handshake");
+
 
     String type = "TLSv1.2";
     try {
@@ -82,6 +86,9 @@ public class server implements Runnable {
       ServerSocket ss = ssf.createServerSocket(port);
       ((SSLServerSocket)ss).setNeedClientAuth(true); // enables client authentication
       new server(ss);
+
+      
+      
     } catch (IOException e) {
       System.out.println("Unable to start Server: " + e.getMessage());
       e.printStackTrace();
