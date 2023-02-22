@@ -1,15 +1,8 @@
 package Project_2;
-import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
-import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.*;
 import java.util.Scanner;
-import java.util.*;
 
 
 /*
@@ -96,7 +89,14 @@ public class client {
       // Set up input output streams using NetworkUtility
       PrintWriter  toServer = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
       BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
-      NetworkUtility nu = new NetworkUtility(toServer, fromServer); 
+
+
+      // Start read and send messages between client and server
+      
+
+
+
+
 
     } catch (Exception e) {
       e.printStackTrace();
