@@ -1,10 +1,9 @@
 package Project_2;
-import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
-import java.security.cert.X509Certificate;
 import java.security.KeyStore;
-import java.security.cert.*;
+import java.util.Scanner;
+
 
 /*
  * This example shows how to set up a key manager to perform client
@@ -16,82 +15,113 @@ import java.security.cert.*;
  */
 
 public class client {
+  private static final int PORT = 9876;
+
   public static void main(String[] args) throws Exception {
-    String host = null;
-    int port = -1;
-    for (int i = 0; i < args.length; i++) {
-      System.out.println("args[" + i + "] = " + args[i]);
-    }
-    if (args.length < 2) {
-      System.out.println("USAGE: java client host port");
-      System.exit(-1);
-    }
-    try { /* get input parameters */
-      host = args[0];
-      port = Integer.parseInt(args[1]);
-    } catch (IllegalArgumentException e) {
-      System.out.println("USAGE: java client host port");
-      System.exit(-1);
+
+    // Set the truststore using name and location
+    System.setProperty("javax.net.ssl.trustStore", "clienttruststore");
+
+    // Initilize varibles
+    // collection of ciphers, protocol versions, trusted certificates, and other TLS options. 
+    SSLSocketFactory factory = null;
+    SSLContext sslContext = null; 
+    KeyManagerFactory keyManagerFactory = null;
+    KeyStore keyStore = null;
+    TrustManagerFactory trustManagerFactory = null;
+    Scanner scan = new Scanner(System.in);
+
+
+    // Initilize input varibles 
+    boolean foundUser = false;
+    FileInputStream inputStream = null;
+    String password = null; 
+    String username = null;
+    String input = null;
+    String serverRespons;
+
+    // Loop until input is correct username and password
+    // Using time-out
+    //e.g "patien1", "nurse1", "doctor1", "GA1"
+    // Each clientkeystore has CN=id number and O = role
+    // CN = (10 numbers)
+    // O = "patient", "doctor", "nurse", "GA"
+    while(foundUser != true) {
+      try {
+        System.out.println("Username: ");
+        username = scan.nextLine();
+
+        System.out.println("Password: ");
+        password = scan.nextLine();
+
+        //Check if such keystore exists
+        inputStream = new FileInputStream("./clientkeystore/"+ username +"keystore");
+        foundUser = true;
+
+      } catch (FileNotFoundException e) {
+        foundUser = false;
+        System.out.println("Username or password is wrong. ");
+      }
     }
 
+    // Try initalize connection with server using username and password
     try {
-      SSLSocketFactory factory = null;
-      try {
-        char[] password = "password".toCharArray();
-        KeyStore ks = KeyStore.getInstance("JKS");
-        KeyStore ts = KeyStore.getInstance("JKS");
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-        SSLContext ctx = SSLContext.getInstance("TLSv1.2");
-        // keystore password (storepass)
-        ks.load(new FileInputStream("clientkeystore"), password);  
-        // truststore password (storepass);
-        ts.load(new FileInputStream("clienttruststore"), password); 
-        kmf.init(ks, password); // user password (keypass)
-        tmf.init(ts); // keystore can be used as truststore here
-        ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-        factory = ctx.getSocketFactory();
-      } catch (Exception e) {
-        throw new IOException(e.getMessage());
-      }
-      SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
-      System.out.println("\nsocket before handshake:\n" + socket + "\n");
+      char[] phrase = password.toCharArray();
+
+      sslContext = SSLContext.getInstance("TLSv1.2");
+      keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+      keyStore = KeyStore.getInstance("JKS");
+      trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+
+
+      // Load keystore using given username and password
+      keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password
+      keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
+      trustManagerFactory.init(keyStore); // Responsible for creating trust managers that can verify the server's digital certificate during the TLS handshake
+      sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
+
+      //Create an SSL socket for the (node) client and connect to the server
+      SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
+
+
+      // Test ....
+      System.out.println(client.getSession().getCipherSuite());
+
+
+      // Set up client and start SSL handshake
+      client.setUseClientMode(true);
+      client.startHandshake();
+      System.out.print("Handshake started....");
+      System.out.print("Client: "+client);
+
+      // Set up input output streams using NetworkUtility
+      PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
+      BufferedReader read = new BufferedReader(new InputStreamReader(client.getInputStream()));  // Listen to server's messages
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); // Whats written in the console that will turn into a message
+
+
+      // Start read from server and send. End session by writing "quit"
+
 
       /*
-       * send http request
-       *
-       * See SSLSocketClient.java for more information about why
-       * there is a forced handshake here when using PrintWriters.
+       *  This part is only implemented for sending and recieving messages. 
+       *  Is not complete and doesnt apply the medical record request etc...
        */
 
-      socket.startHandshake();
-      SSLSession session = socket.getSession();
-      Certificate[] cert = session.getPeerCertificates();
-      String subject = ((X509Certificate) cert[0]).getSubjectX500Principal().getName();
-      System.out.println("certificate name (subject DN field) on certificate received from server:\n" + subject + "\n");
-      System.out.println("socket after handshake:\n" + socket + "\n");
-      System.out.println("secure connection established\n\n");
+      while((input = in.readLine()) != "quit" ) {
+        out.println(input); // print and send the input
+        System.out.println("Sent: "+input);
 
-      BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-      PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      String msg;
-      for (;;) {
-        System.out.print(">");
-        msg = read.readLine();
-        if (msg.equalsIgnoreCase("quit")) {
-          break;
-        }
-        System.out.print("sending '" + msg + "' to server...");
-        out.println(msg);
-        out.flush();
-        System.out.println("done");
-        System.out.println("received '" + in.readLine() + "' from server\n");
+        // Read server's response
+        serverRespons = read.readLine();
+        System.out.println("Received: " + serverRespons);
       }
-      in.close();
+
+      // Closes input, output and the socket in order to end the session
       out.close();
-      read.close();
-      socket.close();
+      in.close();
+      client.close();
+
     } catch (Exception e) {
       e.printStackTrace();
     }
