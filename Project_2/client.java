@@ -35,8 +35,10 @@ public class client {
     // Initilize input varibles 
     boolean foundUser = false;
     FileInputStream inputStream = null;
-    String password; 
+    String password = null; 
     String username = null;
+    String input = null;
+    String serverRespons;
 
     // Loop until input is correct username and password
     // Using time-out
@@ -87,21 +89,34 @@ public class client {
       System.out.print("Client: "+client);
 
       // Set up input output streams using NetworkUtility
-      PrintWriter  toServer = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
-      BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+      PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
+      BufferedReader read = new BufferedReader(new InputStreamReader(client.getInputStream()));  // Listen to server's messages
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); // Whats written in the console that will turn into a message
 
 
-      // Start read and send messages between client and server
-      
+      // Start read from server and send. End session by writing "quit"
 
 
+      /*
+       *  This part is only implemented for sending and recieving messages. 
+       *  Is not complete and doesnt apply the medical record request etc...
+       */
 
+      while((input = in.readLine()) != "quit" ) {
+        out.println(input); // print and send the input
+        System.out.println("Sent: "+input);
 
+        // Read server's response
+        serverRespons = in.readLine();
+        System.out.println("Received: " + serverRespons);
+      }
+
+      out.close();
+      in.close();
+      client.close();
 
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-
   }
 }
