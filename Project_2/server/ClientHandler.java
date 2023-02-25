@@ -24,7 +24,6 @@ public class ClientHandler implements Runnable {
         System.out.println("Client's organization: " + role);
         String clientMsg = in.readLine();
 
-
         // Check permissions based on organization
         if (role.equals("doctor")) {
             handleDoctorRequest(clientMsg, out, in);
