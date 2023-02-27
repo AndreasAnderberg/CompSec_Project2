@@ -15,7 +15,7 @@ public class server2 {
   public static void main(String[] args) throws Exception {
     SSLServerSocket serverSocket = null;
 
-    System.setProperty("javax.net.ssl.trustStore", "./server/servertruststore");
+    System.setProperty("javax.net.ssl.trustStore", "servertruststore");
 
 
     // Initialize variables
@@ -44,6 +44,8 @@ public class server2 {
       System.out.println("Waiting for clients to connect...");
       SSLSocket clientSocket = (SSLSocket) serverSocket.accept();
       System.out.println("Client connected: " + clientSocket);
+
+      System.out.println("Socket created!");
 
       // Set up input and output streams
       PrintWriter out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);

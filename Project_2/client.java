@@ -75,7 +75,8 @@ public class client {
 
 
       // Load keystore using given username and password
-      keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password
+      keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password 
+      
       keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
       trustManagerFactory.init(keyStore); // Responsible for creating trust managers that can verify the server's digital certificate during the TLS handshake
       sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
@@ -84,15 +85,13 @@ public class client {
       factory = sslContext.getSocketFactory();
       SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
 
-      // Test ....
-      System.out.println(client.getSession().getCipherSuite());
-
-
       // Set up client and start SSL handshake
       client.setUseClientMode(true);
       client.startHandshake();
-      System.out.print("Handshake started....");
+      System.out.print("Handshake started...");
       System.out.print("Client: "+client);
+
+      System.out.println("Handshake staaaarted...");
 
       // Set up input output streams using NetworkUtility
       PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
