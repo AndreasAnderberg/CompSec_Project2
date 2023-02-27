@@ -21,12 +21,9 @@ public class ClientHandler implements Runnable {
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         PrintWriter out = new PrintWriter(client.getOutputStream(), true);
         // Read client message
-
+        System.out.println("Client's organization: " + role);
         String clientMsg = in.readLine();
         while(!clientMsg.equals("quit")) {
-           // System.out.println("Received message from client: " + clientMsg);
-
-            System.out.println("Client's organization: " + role);
 
             // Check permissions based on organization
             if (role.equals("doctor")) {
