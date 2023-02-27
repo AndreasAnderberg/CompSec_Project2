@@ -15,7 +15,7 @@ public class server2 {
   public static void main(String[] args) throws Exception {
     SSLServerSocket serverSocket = null;
 
-    System.setProperty("javax.net.ssl.trustStore", "servertruststore");
+    System.setProperty("javax.net.ssl.trustStore", "./server/servertruststore");
 
 
     // Initialize variables
