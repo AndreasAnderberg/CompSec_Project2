@@ -60,13 +60,15 @@ public class ClientHandler implements Runnable {
             String nurse = in.readLine();
             out.println("Skriv namn på division: ");
             String division = in.readLine();
-            Record record = new Record(patient, doctor, nurse, division);
+            out.println("Skriv notes: ");
+            String note = in.readLine();
+            Record record = new Record(patient, doctor, nurse, division, note);
             record.saveToFile(patient + "Record");
             out.println("Record sparat");
         } else if (clientMsg.equals("read")) {
             out.println("Vilket Record vill du läsa?");
             String namn = in.readLine(); 
-            Record record = Record.readRecord("records/doctorRecord");
+            Record record = Record.readRecord("records/" + namn);
             out.println(record.toString());
             
         }

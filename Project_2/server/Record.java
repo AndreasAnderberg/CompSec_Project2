@@ -7,12 +7,14 @@ public class Record {
   private String doctor;
   private String nurse;
   private String division;
+  private String note;
 
-  public Record(String patientName, String doctor, String nurse, String division) {
+  public Record(String patientName, String doctor, String nurse, String division, String note) {
     this.patientName = patientName;
     this.doctor = doctor;
     this.nurse = nurse;
     this.division = division;
+    this.note = note;
   }
 
   public String getPatientName() {
@@ -30,35 +32,27 @@ public class Record {
   public void saveToFile(String filename) throws IOException {
     File file = new File("records/" + filename);
     FileWriter writer = new FileWriter(file);
-    writer.write(patientName + "\n");
-    writer.write(doctor + "\n");
-    writer.write(nurse + "\n");
-    writer.write(division + "\n");
+    writer.write(patientName + ";");
+    writer.write(doctor + ";");
+    writer.write(nurse + ";");
+    writer.write(division + ";");
+    writer.write(note);
     writer.close();
-  }
-
-  public static Record loadFromFile(String filename) throws IOException {
-    File file = new File(filename);
-    BufferedReader reader = new BufferedReader(new FileReader(file));
-    String patientName = reader.readLine();
-    String doctor = reader.readLine();
-    String nurse = reader.readLine();
-    String division = reader.readLine();
-    reader.close();
-    return new Record(patientName, doctor, nurse, division);
   }
 
   public static Record readRecord(String filename) throws IOException {
     try {
-        System.out.println("test222");
         File file = new File(filename);
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String patientName = bufferedReader.readLine();
-        String doctor = bufferedReader.readLine();
-        String nurse = bufferedReader.readLine();
-        String division = bufferedReader.readLine();
-        Record record = new Record(patientName, doctor, nurse, division);
+        String info = bufferedReader.readLine();
+        String[] infos = info.split(";");
+        String patientName = infos[0];
+        String doctor = infos[1];
+        String nurse = infos[2];
+        String division = infos[3];
+        String note = infos[4];
+        Record record = new Record(patientName, doctor, nurse, division, note);
         fileReader.close();
         bufferedReader.close();
         return record;
@@ -71,7 +65,7 @@ public class Record {
   
   @Override
   public String toString() {
-    return "patient: " + this.patientName + "doctor: " + this.doctor + "\n" + "nurse: " + this.nurse + "\n" + "division: " + this.division + "\n";
+    return patientName + ";" + doctor  + ";" + nurse + ";" + division + ";" + note + ";";
   }
 
 }

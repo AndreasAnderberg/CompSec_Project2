@@ -39,7 +39,7 @@ public class client {
     String password = null; 
     String username = null;
     String input = null;
-    String serverRespons;
+    String serverRespons = "";
 
     // Loop until input is correct username and password
     // Using time-out
@@ -56,7 +56,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("clientkeystore");
+        inputStream = new FileInputStream(username); //clientkeystore funkar
         foundUser = true;
 
       } catch (FileNotFoundException e) {
@@ -116,7 +116,12 @@ public class client {
 
         // Read server's response
         serverRespons = read.readLine();
-        System.out.println("Received: " + serverRespons);
+        String[] info = serverRespons.split(";");
+        System.out.println("Received: " + "\n");
+        for (String s : info) {
+          System.out.println(s);
+        }
+
       }
 
       // Closes input, output and the socket in order to end the session
