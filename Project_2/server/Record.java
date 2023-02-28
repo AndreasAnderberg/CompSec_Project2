@@ -1,6 +1,8 @@
 package Project_2.server;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Record {
   private String patientName;
@@ -30,14 +32,19 @@ public class Record {
   }
 
   public void saveToFile(String filename) throws IOException {
-    File file = new File("records/" + filename);
-    FileWriter writer = new FileWriter(file);
-    writer.write(patientName + ";");
-    writer.write(doctor + ";");
-    writer.write(nurse + ";");
-    writer.write(division + ";");
-    writer.write(note);
-    writer.close();
+      FileWriter writer = new FileWriter("records/" + filename, true);
+      String content = Files.readString(Path.of("records/" + filename));
+      StringBuilder sb = new StringBuilder(content);
+
+      sb.append(patientName).append(";");
+      sb.append(doctor).append(";");
+      sb.append(nurse).append(";");
+      sb.append(division).append(";");
+      sb.append(note);
+      sb.append("\n");
+      writer.write(sb.toString());
+
+      writer.close();
   }
 
   public static Record readRecord(String filename) throws IOException {

@@ -90,7 +90,7 @@ public class ClientHandler implements Runnable {
         String note = in.readLine();
         Record record = new Record(patient, doctor, nurse, division, note);
         record.saveToFile(patient + "Record");
-        out.println("Record sparat");
+        out.println("Record sparad");
     }
 
     private void handlePatientRequest(String clientMsg,PrintWriter out, BufferedReader in) {
