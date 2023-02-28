@@ -117,7 +117,7 @@ public class client {
 
         // Read server's response
         serverRespons = read.readLine();
-        String[] info = serverRespons.split(";");
+        info = serverRespons.split(";");
         System.out.println("Received: " + "\n");
         for (String s : info) {
           System.out.println(s);
