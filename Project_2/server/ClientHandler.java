@@ -66,20 +66,15 @@ public class ClientHandler implements Runnable {
 
     private void handlePatientRequest(PrintWriter out, BufferedReader in) throws IOException {
         String clientMsg = "";
-        clientMsg = in.readLine();
         
         while (clientMsg != "quit") {
             out.println("Do you want to read your medical record? (yes / no)");
+            clientMsg = in.readLine();            
 
-            String answer = in.readLine();
-            if(answer == "yes") {
-                Record record = Record.readRecord("records/" + answer);
-
+            if(clientMsg == "yes") {
+                read(out, in);
             }
         }
-
-
-
     }
 
     private void handleDoctorRequest(PrintWriter out, BufferedReader in) {
@@ -106,7 +101,7 @@ public class ClientHandler implements Runnable {
 
     public void read(PrintWriter out, BufferedReader in) throws IOException {
         try {
-            out.println("Vilket Record vill du läsa?");
+            out.println("Vilket Record (namn) vill du läsa?");
             String namn = in.readLine();
             Record record = Record.readRecord("records/" + namn);
             if (record != null) {

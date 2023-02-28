@@ -89,10 +89,6 @@ public class client {
       // Set up client and start SSL handshake
       //client.setUseClientMode(true);
       client.startHandshake();
-      System.out.print("Handshake started...");
-      System.out.print("Client: "+client);
-
-      System.out.println("Handshake staaaarted...");
 
       // Set up input output streams using NetworkUtility
       PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
