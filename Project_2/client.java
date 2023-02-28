@@ -99,10 +99,16 @@ public class client {
       // Start read from server and send. End session by writing "quit"
 
 
-      /*
-       *  This part is only implemented for sending and recieving messages. 
-       *  Is not complete and doesnt apply the medical record request etc...
-       */
+      // Send and read server's first message. Without this we have to initally send a empty message before we can send...
+      out.println(" ");
+      String serverResponse = read.readLine();
+      String[] info = serverResponse.split(";");
+      System.out.println("Received: ");
+      for (String s : info) {
+          System.out.println(s);
+      }
+
+      // This part is only implemented for sending and recieving messages. 
       input = "";
       while(!input.equals("quit")) {
         input = in.readLine();
@@ -116,7 +122,6 @@ public class client {
         for (String s : info) {
           System.out.println(s);
         }
-
       }
 
       // Closes input, output and the socket in order to end the session
