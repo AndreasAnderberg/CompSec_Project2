@@ -55,16 +55,16 @@ public class ClientHandler implements Runnable {
                 saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
                 out.println("Vilket Record vill du läsa?");
-                String namn = in.readLine(); 
-                Record record = Record.readRecord("records/doctorRecord");
+                String namn = in.readLine();
+                Record record = Record.readRecord("records/" + namn);
                 out.println(record.toString());
             } else {
                 out.println("Välj ett kommando...");
             }
             }
-        
+
         }
-        
+
 
 
     private void handlePatientRequest(PrintWriter out, BufferedReader in) {
@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
 
     private void handleDoctorRequest(PrintWriter out, BufferedReader in) {
         out.println("DoctorTest");
-        
+
     }
 
     public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
@@ -86,12 +86,19 @@ public class ClientHandler implements Runnable {
         String nurse = in.readLine();
         out.println("Skriv namn på division: ");
         String division = in.readLine();
-        Record record = new Record(patient, doctor, nurse, division);
+        out.println("Skriv en notering: ");
+        String note = in.readLine();
+        Record record = new Record(patient, doctor, nurse, division, note);
         record.saveToFile(patient + "Record");
         out.println("Record sparat");
     }
 
-    public void read(PrintWriter out, BufferedReader in) throws IOException {
+    private void handlePatientRequest(String clientMsg,PrintWriter out, BufferedReader in) {
+        out.println("PatientTest");
+}
+
+    private void handleDoctorRequest(String s, PrintWriter out, BufferedReader in) {
+        out.println("DoctorTest");
         
     }
 }
