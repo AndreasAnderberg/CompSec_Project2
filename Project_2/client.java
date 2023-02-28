@@ -56,24 +56,10 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("Project_2/clientkeystores/" + username); //clientkeystore funkar
-
-        char[] phrase = password.toCharArray();
-
-        sslContext = SSLContext.getInstance("TLSv1.2");
-        keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
-        keyStore = KeyStore.getInstance("JKS");
-        trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
-
-        // Load keystore using given username and password
-        keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password
-        keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
-        trustManagerFactory.init(keyStore); // Responsible for creating trust managers that can verify the server's digital certificate during the TLS handshake
-        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
-
+        inputStream = new FileInputStream("Project_2/clientkeystores/"+username); //clientkeystore funkar
         foundUser = true;
 
-      } catch (Exception e) {
+      } catch (FileNotFoundException e) {
         foundUser = false;
         System.out.println("Username or password is wrong. ");
       }
@@ -81,18 +67,29 @@ public class client {
 
     // Try initialize connection with server using username and password
     try {
+      char[] phrase = password.toCharArray();
+
+      sslContext = SSLContext.getInstance("TLSv1.2");
+      keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+      keyStore = KeyStore.getInstance("JKS");
+      trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+
+
+      // Load keystore using given username and password
+      keyStore.load(inputStream, phrase); // This line loads the keystore containing the client's certificate and private key, using the given username and password 
+      
+      keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
+      trustManagerFactory.init(keyStore); // Responsible for creating trust managers that can verify the server's digital certificate during the TLS handshake
+      sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
+
       //Create an SSL socket for the (node) client and connect to the server
       factory = sslContext.getSocketFactory();
       SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
 
-      // Test ....
-      System.out.println(client.getSession().getCipherSuite());
-
-
       // Set up client and start SSL handshake
       //client.setUseClientMode(true);
       client.startHandshake();
-      System.out.print("Handshake started....");
+      System.out.print("Handshake started...");
       System.out.print("Client: "+client);
 
       System.out.println("Handshake staaaarted...");

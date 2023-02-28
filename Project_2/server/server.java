@@ -30,8 +30,10 @@ public class server implements Runnable {
         System.out.println(socket.getSession().getCipherSuite());
 
         //sparar role och id som strings, hämtar från certifikatet med cert.getSubjectX500Principal().getName().
-        String role = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
-        String id = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
+        String subject = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>());
+        String[] subjectFields = subject.split(",\\s*");
+        String id = subjectFields[0].substring(3);
+        String role = subjectFields[1].substring(2);
 
         numConnectedClients++;
         System.out.println("client connected");
@@ -83,9 +85,9 @@ public class server implements Runnable {
         KeyStore ts = KeyStore.getInstance("JKS");
         char[] password = "password".toCharArray();
         // keystore password (storepass)
-        ks.load(new FileInputStream("serverkeystore"), password);
+        ks.load(new FileInputStream("Project_2/server/serverkeystore"), password);
         // truststore password (storepass)
-        ts.load(new FileInputStream("servertruststore"), password); 
+        ts.load(new FileInputStream("Project_2/server/servertruststore"), password); 
         kmf.init(ks, password); // certificate password (keypass)
         tmf.init(ts);  // possible to use keystore as truststore here
         ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
