@@ -16,12 +16,10 @@ public class ClientHandler implements Runnable {
 
   public void run() {
     try {
-
-        
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         PrintWriter out = new PrintWriter(client.getOutputStream(), true);
         // Read client message
-        System.out.println("Client's organization: " + role);
+        System.out.println("Client's role: " + role);
 
         // Check permissions based on organization
         if (role.equals("doctor")) {
@@ -86,6 +84,7 @@ public class ClientHandler implements Runnable {
         out.println("Skapar ett nytt record...");
         out.println("Skriv namn på patient: ");
         String patient = in.readLine();
+        System.out.println("patientnamn_DEBUG:" + patient);
         out.println("Skriv namn på doctor: ");
         String doctor = in.readLine();
         out.println("Skriv namn på nurse: ");

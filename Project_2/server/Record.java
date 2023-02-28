@@ -40,8 +40,7 @@ public class Record {
       sb.append(doctor).append(";");
       sb.append(nurse).append(";");
       sb.append(division).append(";");
-      sb.append(note);
-      sb.append("\n");
+      sb.append(note).append("\n");
       writer.write(sb.toString());
 
       writer.close();
