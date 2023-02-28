@@ -21,6 +21,7 @@ public class client {
 
     // Set the truststore using name and location
     System.setProperty("javax.net.ssl.trustStore", "clienttruststore");
+    System.setProperty("javax.net.debug", "handshake");
 
     // Initilize varibles
     // collection of ciphers, protocol versions, trusted certificates, and other TLS options. 
@@ -55,7 +56,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("./clientkeystores/"+ username +"keystore");
+        inputStream = new FileInputStream("clientkeystore");
         foundUser = true;
 
       } catch (FileNotFoundException e) {
@@ -86,7 +87,7 @@ public class client {
       SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
 
       // Set up client and start SSL handshake
-      client.setUseClientMode(true);
+      //client.setUseClientMode(true);
       client.startHandshake();
       System.out.print("Handshake started...");
       System.out.print("Client: "+client);
@@ -106,8 +107,9 @@ public class client {
        *  This part is only implemented for sending and recieving messages. 
        *  Is not complete and doesnt apply the medical record request etc...
        */
-
-      while((input = in.readLine()) != "quit" ) {
+      input = "";
+      while(!input.equals("quit")) {
+        input = in.readLine();
         out.println(input); // print and send the input
         System.out.println("Sent: "+input);
 
