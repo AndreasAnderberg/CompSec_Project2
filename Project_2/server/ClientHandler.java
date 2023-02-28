@@ -54,10 +54,7 @@ public class ClientHandler implements Runnable {
             if (clientMsg.equals("save")) {
                 saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
-                out.println("Vilket Record vill du läsa?");
-                String namn = in.readLine();
-                Record record = Record.readRecord("records/" + namn);
-                out.println(record.toString());
+                read(out, in);
             } else {
                 out.println("Välj ett kommando...");
             }
@@ -107,12 +104,19 @@ public class ClientHandler implements Runnable {
         out.println("Record sparat");
     }
 
-    private void handlePatientRequest(String clientMsg,PrintWriter out, BufferedReader in) {
-        out.println("PatientTest");
-}
-
-    private void handleDoctorRequest(String s, PrintWriter out, BufferedReader in) {
-        out.println("DoctorTest");
-        
+    public void read(PrintWriter out, BufferedReader in) throws IOException {
+        try {
+            out.println("Vilket Record vill du läsa?");
+            String namn = in.readLine();
+            Record record = Record.readRecord("records/" + namn);
+            if (record != null) {
+                out.println(record.toString());
+            } else {
+                out.println("Filen existerar inte");
+                read(out, in);
+            }
+        } catch (NullPointerException e) {
+            out.println(e.getMessage());
+        }
     }
 }
