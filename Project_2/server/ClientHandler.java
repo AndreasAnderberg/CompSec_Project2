@@ -22,18 +22,16 @@ public class ClientHandler implements Runnable {
         PrintWriter out = new PrintWriter(client.getOutputStream(), true);
         // Read client message
         System.out.println("Client's organization: " + role);
-        String clientMsg = in.readLine();
-        System.out.println("Clients message: " + clientMsg);
 
         // Check permissions based on organization
         if (role.equals("doctor")) {
-            handleDoctorRequest(clientMsg, out, in);
+            handleDoctorRequest(out, in);
         } else if (role.equals("patient")) {
-            handlePatientRequest(clientMsg, out, in);
+            handlePatientRequest(out, in);
         } else if (role.equals("nurse")) {
-            handleNurseRequest(clientMsg, out, in);
+            handleNurseRequest(out, in);
         } else if (role.equals("Andreas Anderberg (an8521an-s)/Thilda Holmner (ti8080ho-s)/Adam Tegelberg Hagnefors (ad3444te-s)/Andre Roxhage (an8603ro-s)")) {
-            handleNurseRequest(clientMsg, out, in);
+            handleNurseRequest(out, in);
         } else {
             out.println("Error: unknown user");
         }
@@ -47,34 +45,53 @@ public class ClientHandler implements Runnable {
         e.printStackTrace();
         return;
     }
-}
+  }
 
-    private void handleNurseRequest(String clientMsg, PrintWriter out, BufferedReader in) throws IOException {
-        if (clientMsg.equals("save")) {
-            out.println("Skapar ett nytt record...");
-            out.println("Skriv namn på patient: ");
-            String patient = in.readLine();
-            out.println("Skriv namn på doctor: ");
-            String doctor = in.readLine();
-            out.println("Skriv namn på nurse: ");
-            String nurse = in.readLine();
-            out.println("Skriv namn på division: ");
-            String division = in.readLine();
-            out.println("Skriv notes: ");
-            String note = in.readLine();
-            Record record = new Record(patient, doctor, nurse, division, note);
-            record.saveToFile(patient + "Record");
-            out.println("Record sparat");
-        } else if (clientMsg.equals("read")) {
-            out.println("Vilket Record vill du läsa?");
-            String namn = in.readLine(); 
-            Record record = Record.readRecord("records/" + namn);
-            out.println(record.toString());
-            
+    private void handleNurseRequest(PrintWriter out, BufferedReader in) throws IOException {
+        String clientMsg = "";
+        while (clientMsg != "quit") {
+            clientMsg = in.readLine();
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
+            } else if (clientMsg.equals("read")) {
+                out.println("Vilket Record vill du läsa?");
+                String namn = in.readLine();
+                Record record = Record.readRecord("records/doctorRecord");
+                out.println(record.toString());
+            } else {
+                out.println("Välj ett kommando...");
+            }
+            }
+
         }
-        out.println("nu vart det slut");
-        
-}
+
+
+
+    private void handlePatientRequest(PrintWriter out, BufferedReader in) {
+        out.println("PatientTest");
+    }
+
+    private void handleDoctorRequest(PrintWriter out, BufferedReader in) {
+        out.println("DoctorTest");
+
+    }
+
+    public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
+        out.println("Skapar ett nytt record...");
+        out.println("Skriv namn på patient: ");
+        String patient = in.readLine();
+        out.println("Skriv namn på doctor: ");
+        String doctor = in.readLine();
+        out.println("Skriv namn på nurse: ");
+        String nurse = in.readLine();
+        out.println("Skriv namn på division: ");
+        String division = in.readLine();
+        out.println("Skriv en notering: ");
+        String note = in.readLine();
+        Record record = new Record(patient, doctor, nurse, division, note);
+        record.saveToFile(patient + "Record");
+        out.println("Record sparat");
+    }
 
     private void handlePatientRequest(String clientMsg,PrintWriter out, BufferedReader in) {
         out.println("PatientTest");
