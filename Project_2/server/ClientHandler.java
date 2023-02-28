@@ -56,7 +56,7 @@ public class ClientHandler implements Runnable {
             } else if (clientMsg.equals("read")) {
                 out.println("Vilket Record vill du läsa?");
                 String namn = in.readLine();
-                Record record = Record.readRecord("records/doctorRecord");
+                Record record = Record.readRecord("records/" + namn);
                 out.println(record.toString());
             } else {
                 out.println("Välj ett kommando...");
