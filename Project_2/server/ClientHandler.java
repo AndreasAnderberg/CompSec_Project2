@@ -23,6 +23,7 @@ public class ClientHandler implements Runnable {
         // Read client message
         System.out.println("Client's organization: " + role);
         String clientMsg = in.readLine();
+        System.out.println("Clients message: " + clientMsg);
 
         // Check permissions based on organization
         if (role.equals("doctor")) {

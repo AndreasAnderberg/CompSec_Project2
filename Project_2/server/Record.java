@@ -61,6 +61,7 @@ public class Record {
         return record;
 
     } catch (IOException e) {
+      System.out.println(e);
         return null;
     }
   } 
