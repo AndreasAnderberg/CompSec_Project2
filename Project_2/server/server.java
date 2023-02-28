@@ -20,35 +20,40 @@ public class server implements Runnable {
   }
 
   public void run() {
-    try {
-      SSLSocket socket=(SSLSocket)serverSocket.accept();
+    while (true) {
+      try {
+        SSLSocket socket=(SSLSocket)serverSocket.accept();
 
-      SSLSession session = socket.getSession();
-      X509Certificate cert = (X509Certificate) session.getPeerCertificates()[0];
-      
-      System.out.println(socket.getSession().getCipherSuite());
+        SSLSession session = socket.getSession();
+        X509Certificate cert = (X509Certificate) session.getPeerCertificates()[0];
 
-      //sparar role och id som strings, hämtar från certifikatet med cert.getSubjectX500Principal().getName().
-      String role = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
-      String id = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
+        System.out.println(socket.getSession().getCipherSuite());
 
-      numConnectedClients++;
-      System.out.println("client connected");
-      System.out.println("client id (CN field): " + id);
-      System.out.println("client role (O field): " + role);
-      System.out.println(numConnectedClients + " concurrent connection(s)\n");
+        //sparar role och id som strings, hämtar från certifikatet med cert.getSubjectX500Principal().getName().
+        String role = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
+        String id = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>()).split(",\\s*")[0].substring(3);
 
-      ClientHandler clientHandler = new ClientHandler(socket, role);
-      new Thread(clientHandler).start();
-    } catch (IOException e) {
-      System.err.println("Error in connection attempt.");
-  }
+        numConnectedClients++;
+        System.out.println("client connected");
+        System.out.println("client id (CN field): " + id);
+        System.out.println("client role (O field): " + role);
+        System.out.println(numConnectedClients + " concurrent connection(s)\n");
+
+        System.out.println("creating clientHandler");
+        ClientHandler clientHandler = new ClientHandler(socket, role);
+        new Thread(clientHandler).start();
+      } catch (IOException e) {
+        System.err.println("Error in connection attempt.");
+      }
+    }
 }
 
 
-    
-  
-  private void newListener() { (new Thread(this)).start(); } // calls run()
+  private void newListener() {
+      (new Thread(this)).start();
+  } // calls run()
+
+
   public static void main(String args[]) {
     System.out.println("\nServer Started\n");
     int port = 9876;
@@ -78,7 +83,7 @@ public class server implements Runnable {
         KeyStore ts = KeyStore.getInstance("JKS");
         char[] password = "password".toCharArray();
         // keystore password (storepass)
-        ks.load(new FileInputStream("serverkeystore"), password);  
+        ks.load(new FileInputStream("serverkeystore"), password);
         // truststore password (storepass)
         ts.load(new FileInputStream("servertruststore"), password); 
         kmf.init(ks, password); // certificate password (keypass)

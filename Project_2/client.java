@@ -65,7 +65,7 @@ public class client {
       }
     }
 
-    // Try initalize connection with server using username and password
+    // Try initialize connection with server using username and password
     try {
       char[] phrase = password.toCharArray();
 
