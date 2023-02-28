@@ -64,8 +64,9 @@ public class ClientHandler implements Runnable {
             record.saveToFile(patient + "Record");
             out.println("Record sparat");
         } else if (clientMsg.equals("read")) {
-            out.println("Vilket Record vill du läsa?"); 
-            Record record = Record.readRecord("patient1Record");
+            out.println("Vilket Record vill du läsa?");
+            String namn = in.readLine(); 
+            Record record = Record.readRecord("records/doctorRecord");
             out.println(record.toString());
             
         }
