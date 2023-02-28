@@ -50,7 +50,9 @@ public class Record {
 
   public static Record readRecord(String filename) throws IOException {
     try {
-        FileReader fileReader = new FileReader(filename);
+        System.out.println("test222");
+        File file = new File(filename);
+        FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String patientName = bufferedReader.readLine();
         String doctor = bufferedReader.readLine();
@@ -58,12 +60,18 @@ public class Record {
         String division = bufferedReader.readLine();
         Record record = new Record(patientName, doctor, nurse, division);
         fileReader.close();
+        bufferedReader.close();
         return record;
 
     } catch (IOException e) {
         return null;
     }
-  } 
+  }
+  
+  @Override
+  public String toString() {
+    return "patient: " + this.patientName + "doctor: " + this.doctor + "\n" + "nurse: " + this.nurse + "\n" + "division: " + this.division + "\n";
+  }
 
 }
 
