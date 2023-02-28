@@ -30,7 +30,7 @@ public class ClientHandler implements Runnable {
             handlePatientRequest(out, in);
         } else if (role.equals("nurse")) {
             handleNurseRequest(out, in);
-        } else if (role.equals("Andreas Anderberg (an8521an-s)/Thilda Holmner (ti8080ho-s)/Adam Tegelberg Hagnefors (ad3444te-s)/Andre Roxhage (an8603ro-s)")) {
+        } else if (role.equals("ga")) {
             handleNurseRequest(out, in);
         } else {
             out.println("Error: unknown user");
@@ -61,14 +61,28 @@ public class ClientHandler implements Runnable {
             } else {
                 out.println("Välj ett kommando...");
             }
-            }
+        }
 
         }
 
 
 
-    private void handlePatientRequest(PrintWriter out, BufferedReader in) {
-        out.println("PatientTest");
+    private void handlePatientRequest(PrintWriter out, BufferedReader in) throws IOException {
+        String clientMsg = "";
+        clientMsg = in.readLine();
+        
+        while (clientMsg != "quit") {
+            out.println("Do you want to read your medical record? (yes / no)");
+
+            String answer = in.readLine();
+            if(answer == "yes") {
+                Record record = Record.readRecord("records/" + answer);
+
+            }
+        }
+
+
+
     }
 
     private void handleDoctorRequest(PrintWriter out, BufferedReader in) {
