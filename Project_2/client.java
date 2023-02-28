@@ -56,7 +56,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream(username); //clientkeystore funkar
+        inputStream = new FileInputStream("Project_2/clientkeystores/"+username); //clientkeystore funkar
         foundUser = true;
 
       } catch (FileNotFoundException e) {
