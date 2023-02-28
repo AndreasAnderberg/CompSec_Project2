@@ -54,7 +54,7 @@ public class ClientHandler implements Runnable {
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
-                out.println("Välj ett kommando...");
+                out.println("Choose a command: (read save quit)");
             }
         }
 
@@ -66,11 +66,11 @@ public class ClientHandler implements Runnable {
         String clientMsg = "";
         
         while (clientMsg != "quit") {
-            out.println("Do you want to read your medical record? (yes / no)");
-            clientMsg = in.readLine();            
-
-            if(clientMsg == "yes") {
+            clientMsg = in.readLine();
+            if (clientMsg.equals("yes")) {
                 read(out, in);
+            } else {
+                out.println("Do you want to read your medical record? (yes / no)");
             }
         }
     }
@@ -100,13 +100,14 @@ public class ClientHandler implements Runnable {
 
     public void read(PrintWriter out, BufferedReader in) throws IOException {
         try {
-            out.println("Vilket Record (namn) vill du läsa?");
+            out.println("Who's record do you want to read?");
             String namn = in.readLine();
             Record record = Record.readRecord("records/" + namn);
             if (record != null) {
-                out.println(record.toString());
+                out.println(record.toString() +";"+"Click (enter) to go back!");
+
             } else {
-                out.println("Filen existerar inte");
+                out.println("File does not exist!");
                 read(out, in);
             }
         } catch (NullPointerException e) {
