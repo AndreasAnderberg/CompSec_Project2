@@ -30,7 +30,7 @@ public class ClientHandler implements Runnable {
             handlePatientRequest(out, in);
         } else if (role.equals("nurse")) {
             handleNurseRequest(out, in);
-        } else if (role.equals("Andreas Anderberg (an8521an-s)/Thilda Holmner (ti8080ho-s)/Adam Tegelberg Hagnefors (ad3444te-s)/Andre Roxhage (an8603ro-s)")) {
+        } else if (role.equals("ga")) {
             handleNurseRequest(out, in);
         } else {
             out.println("Error: unknown user");
@@ -54,21 +54,27 @@ public class ClientHandler implements Runnable {
             if (clientMsg.equals("save")) {
                 saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
-                out.println("Vilket Record vill du läsa?");
-                String namn = in.readLine();
-                Record record = Record.readRecord("records/" + namn);
-                out.println(record.toString());
+                read(out, in);
             } else {
                 out.println("Välj ett kommando...");
             }
-            }
+        }
 
         }
 
 
 
-    private void handlePatientRequest(PrintWriter out, BufferedReader in) {
-        out.println("PatientTest");
+    private void handlePatientRequest(PrintWriter out, BufferedReader in) throws IOException {
+        String clientMsg = "";
+        
+        while (clientMsg != "quit") {
+            out.println("Do you want to read your medical record? (yes / no)");
+            clientMsg = in.readLine();            
+
+            if(clientMsg == "yes") {
+                read(out, in);
+            }
+        }
     }
 
     private void handleDoctorRequest(PrintWriter out, BufferedReader in) {
@@ -93,12 +99,19 @@ public class ClientHandler implements Runnable {
         out.println("Record sparad");
     }
 
-    private void handlePatientRequest(String clientMsg,PrintWriter out, BufferedReader in) {
-        out.println("PatientTest");
-}
-
-    private void handleDoctorRequest(String s, PrintWriter out, BufferedReader in) {
-        out.println("DoctorTest");
-        
+    public void read(PrintWriter out, BufferedReader in) throws IOException {
+        try {
+            out.println("Vilket Record (namn) vill du läsa?");
+            String namn = in.readLine();
+            Record record = Record.readRecord("records/" + namn);
+            if (record != null) {
+                out.println(record.toString());
+            } else {
+                out.println("Filen existerar inte");
+                read(out, in);
+            }
+        } catch (NullPointerException e) {
+            out.println(e.getMessage());
+        }
     }
 }
