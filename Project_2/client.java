@@ -95,6 +95,8 @@ public class client {
       System.out.print("Handshake started....");
       System.out.print("Client: "+client);
 
+      System.out.println("Handshake staaaarted...");
+
       // Set up input output streams using NetworkUtility
       PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
       BufferedReader read = new BufferedReader(new InputStreamReader(client.getInputStream()));  // Listen to server's messages
@@ -105,7 +107,7 @@ public class client {
 
 
       /*
-       *  This part is only implemented for sending and recieving messages.
+       *  This part is only implemented for sending and recieving messages. 
        *  Is not complete and doesnt apply the medical record request etc...
        */
       input = "";

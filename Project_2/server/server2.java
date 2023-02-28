@@ -45,6 +45,8 @@ public class server2 {
       SSLSocket clientSocket = (SSLSocket) serverSocket.accept();
       System.out.println("Client connected: " + clientSocket);
 
+      System.out.println("Socket created!");
+
       // Set up input and output streams
       PrintWriter out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
       BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
