@@ -102,6 +102,7 @@ public class client {
       // Send and read server's first message. Without this we have to initally send a empty message before we can send...
       out.println(" ");
       String serverResponse = read.readLine();
+      System.out.println("Response: " + serverResponse);
       String[] info = serverResponse.split(";");
       System.out.println("Received: ");
       for (String s : info) {

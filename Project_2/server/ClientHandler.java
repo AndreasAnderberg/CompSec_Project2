@@ -103,7 +103,7 @@ public class ClientHandler implements Runnable {
             String namn = in.readLine();
             Record record = Record.readRecord("records/" + namn + "Record");
             if (record != null) {
-                out.println(record.toString() +";"+"Click (enter) to go back!");
+                out.println(record.toString() +";"+"Press (enter) to go back!");
 
             } else {
                 out.println("File does not exist!");
