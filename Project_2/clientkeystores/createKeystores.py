@@ -18,7 +18,10 @@ for i in range(num_keystores):
         f"Enter idnumber for keystore (10 numbers) {i+1}: "
     )  # 10 numbers
     role = input(
-        f"Enter role for keystore (nurse doctor patient ga) {i+1}: "
+        f"Enter role for keystore (nurse, doctor, patient, ga) {i+1}: "
+    )
+    division = input(
+        f"Enter division for keystore (1, 2, 3) {i+1}: "
     )
     password = "psw"+idnumber
 
@@ -26,10 +29,11 @@ for i in range(num_keystores):
     print("idnumber: " + idnumber)
     print("role: " + role)
     print("password: " + password)
+    print("division: " + division)
 
     # 3.2 Create keystore: the keypass and storepass is same for testing only
     os.system(
-        f"keytool -genkey -alias {idnumber} -keystore {idnumber} -keyalg RSA -storepass {password} -keypass {password} -dname \"CN={idnumber}, O={role}\""
+        f"keytool -genkey -alias {idnumber} -keystore {idnumber} -keyalg RSA -storepass {password} -keypass {password} -dname \"CN={idnumber}, O={role}, S={division}\""
     )
 
     # 3.3 Create Certificate Signing Request (CSR) for keys in clientkeystore
