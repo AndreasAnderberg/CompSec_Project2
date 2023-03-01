@@ -33,8 +33,8 @@ public class Record {
 
   public void saveToFile(String filename) throws IOException {
       FileWriter writer = new FileWriter("records/" + filename, true);
-      String content = Files.readString(Path.of("records/" + filename));
-      StringBuilder sb = new StringBuilder(content);
+      //String content = Files.readString(Path.of("records/" + filename));
+      StringBuilder sb = new StringBuilder();
 
       sb.append(patientName).append(";");
       sb.append(doctor).append(";");

@@ -81,8 +81,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
-        out.println("Skapar ett nytt record...");
-        out.println("Skriv namn på patient: ");
+        out.println("Skapar ett nytt record...;Skriv namn på patient: ");
         String patient = in.readLine();
         System.out.println("patientnamn_DEBUG:" + patient);
         out.println("Skriv namn på doctor: ");
@@ -102,7 +101,7 @@ public class ClientHandler implements Runnable {
         try {
             out.println("Who's record do you want to read?");
             String namn = in.readLine();
-            Record record = Record.readRecord("records/" + namn);
+            Record record = Record.readRecord("records/" + namn + "Record");
             if (record != null) {
                 out.println(record.toString() +";"+"Click (enter) to go back!");
 
