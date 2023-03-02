@@ -57,7 +57,7 @@ public class ClientHandler implements Runnable {
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
-                out.println("Choose a command: (read | quit)");
+                out.println("Choose a command: (read | save | quit)");
             }
         }
     }
@@ -153,12 +153,12 @@ public class ClientHandler implements Runnable {
                 System.out.println("Records of " + patient + " was deleted successfully");
                 out.println("Record deleted;Press (enter) to go back!");
                 Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + " has destroyed this record at timestamp: "+ now);
+                Log.generateLog(patient, "IDnbr " + id + "has destroyed this record at timestamp: "+ now);
             } else{
                 System.out.println("Failure in deletion of records of " + patient);
                 out.println("Failure in deletion;Press (enter) to go back!");
                 Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + " tried to destroy this record at timestamp: "+ now);
+                Log.generateLog(patient, "IDnbr " + id + "tried to destroy this record at timestamp: "+ now);
             }
         }catch(Exception e){
             System.out.println(e);
