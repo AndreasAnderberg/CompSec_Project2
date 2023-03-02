@@ -131,22 +131,29 @@ public class ClientHandler implements Runnable {
     }
 
     public void read(PrintWriter out, BufferedReader in) throws IOException {
-        try {
-            out.println("Who's record do you want to read?");
-            String patient = in.readLine();
-            Record record = Record.readRecord("records/" + patient + ".record");
-            if (record != null) {
-                Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + " has read this record at timestamp: "+ now);
-                out.println(record +";"+"Press (enter) to go back!");
 
-            } else {
-                out.println("File does not exist!");
-                read(out, in);
+        while(in.readLine() != "back" ) {
+            try {
+                out.println("Write idnumber for record you'd like to read: (idnumber | back)");
+                String idRecord = in.readLine();
+                Record record = Record.readRecord("records/" + idRecord + ".record");
+                if (record != null) {
+    
+                    // Check access controll (patient id num)
+                    checkAccess(idRecord);
+    
+                    Date now = new Date();
+                    Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
+                    out.println(record +";"+"Press (enter) to go back!");
+    
+                } else {
+                    out.println("File does not exist!");
+                }
+            } catch (NullPointerException e) {
+                out.println(e.getMessage());
             }
-        } catch (NullPointerException e) {
-            out.println(e.getMessage());
         }
+        
     }
 
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
@@ -169,5 +176,21 @@ public class ClientHandler implements Runnable {
         }catch(Exception e){
             System.out.println(e);
         }
+    }
+    
+    private boolean checkAccess(String idRecord) {
+        // Patient: same id as 
+
+        // Nurse: only for same division
+
+
+        // Doctor: only for same division
+
+        boolean acCtrl = false;
+
+
+
+
+        return acCtrl;
     }
 }
