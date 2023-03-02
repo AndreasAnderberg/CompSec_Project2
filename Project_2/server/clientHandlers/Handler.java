@@ -52,19 +52,16 @@ public abstract class Handler implements Runnable{
                     return;
                 }
                 Record record = Record.readRecord("records/" + idRecord + ".record");
-                if (record != null) {
-
+                if (record != null) { // om recorden finns
                     // Check access controll (patient id num)
-                    checkAccess(idRecord, record);
-
-                    Date now = new Date();
-                    Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
-                    out.println(record +";"+"Press (enter) to go back!");
-                    return;
-
-                } else {
-                    out.println("File does not exist!");
+                    if(checkAccess(record)){
+                        Date now = new Date();
+                        Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
+                        out.println(record +";"+"Press (enter) to go back!");
+                        return;
+                    }
                 }
+                out.println("File does not exist!");
             } catch (NullPointerException e) {
                 out.println(e.getMessage());
             }
@@ -72,8 +69,30 @@ public abstract class Handler implements Runnable{
         }
     }
 
+    public void saveRecord(PrintWriter out, BufferedReader in) throws IOException{
+        out.println("Creating new record...;Write patient's name: ");
+        String patient = in.readLine();
+        if(checkAccess(Record.readRecord("records/" + patient + ".record"))){
+            out.println("Write doctor's name: ");
+            String doctor = in.readLine();
+            out.println("Write nurse's name: ");
+            String nurse = in.readLine();
+            out.println("Write division's name: ");
+            String division = in.readLine();
+            out.println("Write a note: ");
+            String note = in.readLine();
+            Record record = new Record(patient, doctor, nurse, division, note);
+            Date now = new Date();
+            Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
+            record.saveToFile(patient + ".record");
+            out.println("Record saved");
+        } else{
+            out.println("No such record found");
+        }
+    }
+
+
     protected abstract void handleRequests(PrintWriter out, BufferedReader in) throws IOException;
-    public abstract void saveRecord(PrintWriter out, BufferedReader in) throws IOException;
     public abstract void destroyRecord(PrintWriter out, BufferedReader in) throws IOException;
-    protected abstract boolean checkAccess(String idRecord, Record record);
+    protected abstract boolean checkAccess(Record record);
 }

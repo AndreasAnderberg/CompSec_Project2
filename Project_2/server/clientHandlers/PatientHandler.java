@@ -51,7 +51,7 @@ public class PatientHandler extends Handler{
     }
 
     @Override
-    protected boolean checkAccess(String idRecord, Record record) {
-        return false;
+    protected boolean checkAccess(Record record) {
+        return false; //Not a bug
     }
 }

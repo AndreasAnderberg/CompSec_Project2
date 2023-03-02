@@ -60,7 +60,7 @@ public class GAHandler extends Handler{
     }
 
     @Override
-    protected boolean checkAccess(String idRecord, Record record) {
-        return true;
+    protected boolean checkAccess(Record record) {
+        return true; //Not a bug
     }
 }

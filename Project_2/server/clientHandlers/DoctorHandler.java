@@ -30,31 +30,12 @@ public class DoctorHandler extends Handler {
     }
 
     @Override
-    public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
-        out.println("Creating new record...;Write patient's name: ");
-        String patient = in.readLine();
-        out.println("Write doctor's name: ");
-        String doctor = in.readLine();
-        out.println("Write nurse's name: ");
-        String nurse = in.readLine();
-        out.println("Write division's name: ");
-        String division = in.readLine();
-        out.println("Write a note: ");
-        String note = in.readLine();
-        Record record = new Record(patient, doctor, nurse, division, note);
-        Date now = new Date();
-        Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
-        record.saveToFile(patient + ".record");
-        out.println("Record saved");
-    }
-
-    @Override
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
         //Not used
     }
 
     @Override
-    protected boolean checkAccess(String idRecord, Record record) {
+    protected boolean checkAccess(Record record) {
         return true;
     }
 }
