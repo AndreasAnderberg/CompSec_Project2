@@ -118,7 +118,7 @@ public class ClientHandler implements Runnable {
         Record record = new Record(patient, doctor, nurse, division, note);
         Date now = new Date();
         Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
-        record.saveToFile(patient + "Record");
+        record.saveToFile(patient + ".record");
         out.println("Record saved");
     }
 
@@ -126,7 +126,7 @@ public class ClientHandler implements Runnable {
         try {
             out.println("Who's record do you want to read?");
             String patient = in.readLine();
-            Record record = Record.readRecord("records/" + patient + "Record");
+            Record record = Record.readRecord("records/" + patient + ".record");
             if (record != null) {
                 Date now = new Date();
                 Log.generateLog(patient, "IDnbr " + id + " has read this record at timestamp: "+ now);
@@ -146,7 +146,7 @@ public class ClientHandler implements Runnable {
             out.println("Who's record do you want to destroy?");
             String patient = in.readLine();
 
-            File file = new File("Records/" + patient + "Record");
+            File file = new File("Records/" + patient + ".record");
             if(file.delete()){
                 System.out.println("Records of " + patient + " was deleted successfully");
                 out.println("Record deleted;Press (enter) to go back!");
