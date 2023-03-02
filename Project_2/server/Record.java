@@ -32,6 +32,11 @@ public class Record {
       writer.close();
   }
 
+  public static boolean fileExists(String filename){
+      File f = new File(filename);
+      return f.exists();
+  }
+
   public static Record readRecord(String filename) throws IOException {
     try {
         File file = new File(filename);
