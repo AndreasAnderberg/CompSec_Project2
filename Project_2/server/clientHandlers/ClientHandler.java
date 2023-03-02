@@ -73,7 +73,15 @@ public class ClientHandler implements Runnable {
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
             if (clientMsg.equals("yes")) {
-                read(out, in);
+                try {
+                    Record record = Record.readRecord("records/" + id + ".record");
+                    Date now = new Date();
+                    Log.generateLog(id, "IDnbr " + id + " has read this record at timestamp: "+ now);
+                    out.println(record +";"+"Press (enter) to go back!");
+                } catch (Exception e) {
+                    System.out.print("You have no medical record :'( ");
+                }
+                
             } else {
                 out.println("Do you want to read your medical record? (yes / no)");
             }
@@ -146,7 +154,7 @@ public class ClientHandler implements Runnable {
                 if (record != null) {
     
                     // Check access controll (patient id num)
-                    checkAccess(idRecord);
+                    checkAccess(idRecord, record);
     
                     Date now = new Date();
                     Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
@@ -184,8 +192,10 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    private boolean checkAccess(String idRecord) {
+    private boolean checkAccess(String idRecord, Record record) {
         // Patient: same id as 
+        String[] words = record.toString().split(";");
+
 
         // Nurse: only for same division
 
