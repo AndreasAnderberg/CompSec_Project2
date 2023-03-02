@@ -1,5 +1,7 @@
 package Project_2.server;
 import java.io.*;
+import java.sql.Date;
+
 import javax.net.ssl.*;
 
 
@@ -8,10 +10,15 @@ public class ClientHandler implements Runnable {
   
     private final SSLSocket client;
     private final String role;
+    private final String id;
+    private final String division;
 
-    public ClientHandler(SSLSocket client, String role) {
+    public ClientHandler(SSLSocket client, String role, String id, String division) {
         this.client = client;
         this.role = role;
+        this.id = id;
+        this.division = division;
+
     }
 
   public void run() {
@@ -93,27 +100,19 @@ public class ClientHandler implements Runnable {
         out.println("Skriv en notering: ");
         String note = in.readLine();
         Record record = new Record(patient, doctor, nurse, division, note);
-<<<<<<< HEAD
         record.saveToFile(patient + "Record");
         out.println("Record sparad");
-=======
         Date now = new Date();
         Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
         record.saveToFile(patient + ".record");
         out.println("Record saved");
->>>>>>> 2ca07bc608638374de38b6f804a0caed0db72a00
     }
 
     public void read(PrintWriter out, BufferedReader in) throws IOException {
         try {
             out.println("Who's record do you want to read?");
-<<<<<<< HEAD
             String namn = in.readLine();
             Record record = Record.readRecord("records/" + namn + "Record");
-=======
-            String patient = in.readLine();
-            Record record = Record.readRecord("records/" + patient + ".record");
->>>>>>> 2ca07bc608638374de38b6f804a0caed0db72a00
             if (record != null) {
                 out.println(record.toString() +";"+"Press (enter) to go back!");
 
@@ -125,29 +124,4 @@ public class ClientHandler implements Runnable {
             out.println(e.getMessage());
         }
     }
-<<<<<<< HEAD
-=======
-
-    public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
-        try{
-            out.println("Who's record do you want to destroy?");
-            String patient = in.readLine();
-
-            File file = new File("Records/" + patient + ".record");
-            if(file.delete()){
-                System.out.println("Records of " + patient + " was deleted successfully");
-                out.println("Record deleted;Press (enter) to go back!");
-                Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + "has destroyed this record at timestamp: "+ now);
-            } else{
-                System.out.println("Failure in deletion of records of " + patient);
-                out.println("Failure in deletion;Press (enter) to go back!");
-                Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + "tried to destroy this record at timestamp: "+ now);
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }
->>>>>>> 2ca07bc608638374de38b6f804a0caed0db72a00
 }
