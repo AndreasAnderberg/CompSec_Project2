@@ -52,7 +52,9 @@ public class ClientHandler implements Runnable {
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
 
-            if (clientMsg.equals("read")) {
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
+            } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
                 out.println("Choose a command: (read | quit)");
@@ -151,12 +153,12 @@ public class ClientHandler implements Runnable {
                 System.out.println("Records of " + patient + " was deleted successfully");
                 out.println("Record deleted;Press (enter) to go back!");
                 Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + "has destroyed this record at timestamp: "+ now);
+                Log.generateLog(patient, "IDnbr " + id + " has destroyed this record at timestamp: "+ now);
             } else{
                 System.out.println("Failure in deletion of records of " + patient);
                 out.println("Failure in deletion;Press (enter) to go back!");
                 Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + "tried to destroy this record at timestamp: "+ now);
+                Log.generateLog(patient, "IDnbr " + id + " tried to destroy this record at timestamp: "+ now);
             }
         }catch(Exception e){
             System.out.println(e);
