@@ -41,6 +41,11 @@ public class Record {
   public static Record readRecord(String filename) throws IOException {
     try {
         File file = new File(filename);
+        if(!file.exists()){
+            System.out.println("file with path " + filename + " existance: " + file.exists());
+            return null;
+        }
+
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         ArrayList<Entry> entries = new ArrayList<>();
@@ -68,6 +73,31 @@ public class Record {
       System.out.println(e);
         return null;
     }
+  }
+
+  public boolean hasDoctor(String doctorID){
+      for (Entry entry : entries){
+          if(entry.getDoctor().equals(doctorID)){
+              return true;
+          }
+      }
+      return false;
+  }
+
+  public boolean hasNurse(String nurseID){
+      for (Entry entry : entries){
+         if(entry.getNurse().equals(nurseID)){
+             return true;
+         }
+      }
+      return false;
+  }
+
+  public String getDivision(){
+      for(Entry entry : entries){
+          return entry.getDivision();
+      }
+      return "-1";
   }
 
   @Override

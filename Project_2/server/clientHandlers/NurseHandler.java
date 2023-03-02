@@ -36,7 +36,9 @@ public class NurseHandler extends Handler{
 
     @Override
     protected boolean checkAccess(Record record) {
-        //Record.fileExists("records/" + patient + ".record")
-        return true;
+        if(record == null){
+            return false;
+        }
+        return record.hasNurse(id) || record.getDivision().equals(division);
     }
 }

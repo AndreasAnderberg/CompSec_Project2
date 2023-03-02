@@ -44,16 +44,16 @@ public abstract class Handler implements Runnable{
     public void read(PrintWriter out, BufferedReader in) throws IOException{
         String idRecord = "init";
 
-        while(!idRecord.equals("back")) {
+        while(true) {
             try {
                 out.println("Write idnumber for record you'd like to read: (idnumber | back)");
                 idRecord = in.readLine();
                 if(idRecord.equals("back")){
+                    out.println("Going back");
                     return;
                 }
                 Record record = Record.readRecord("records/" + idRecord + ".record");
                 if (record != null) { // om recorden finns
-                    // Check access controll (patient id num)
                     if(checkAccess(record)){
                         Date now = new Date();
                         Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
@@ -61,7 +61,7 @@ public abstract class Handler implements Runnable{
                         return;
                     }
                 }
-                out.println("File does not exist!");
+                out.println("File does not exist! (enter)");
             } catch (NullPointerException e) {
                 out.println(e.getMessage());
             }
@@ -72,6 +72,7 @@ public abstract class Handler implements Runnable{
     public void saveRecord(PrintWriter out, BufferedReader in) throws IOException{
         out.println("Creating new record...;Write patient's name: ");
         String patient = in.readLine();
+
         if(checkAccess(Record.readRecord("records/" + patient + ".record"))){
             out.println("Write doctor's name: ");
             String doctor = in.readLine();

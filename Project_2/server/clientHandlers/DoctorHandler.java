@@ -19,6 +19,7 @@ public class DoctorHandler extends Handler {
         String clientMsg = "";
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
+
             if (clientMsg.equals("save")) {
                 saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
@@ -36,6 +37,9 @@ public class DoctorHandler extends Handler {
 
     @Override
     protected boolean checkAccess(Record record) {
-        return true;
+        if(record == null){
+            return true;
+        }
+        return record.hasDoctor(id) || record.getDivision().equals(division);
     }
 }
