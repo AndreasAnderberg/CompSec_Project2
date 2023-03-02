@@ -1,7 +1,11 @@
 package Project_2.server;
 import java.io.*;
+<<<<<<< HEAD
 import java.sql.Date;
 
+=======
+import java.util.Date;
+>>>>>>> d763a3188930184ead8d9d8680bb02b5ab891dd0
 import javax.net.ssl.*;
 
 
@@ -11,6 +15,7 @@ public class ClientHandler implements Runnable {
     private final SSLSocket client;
     private final String role;
     private final String id;
+<<<<<<< HEAD
     private final String division;
 
     public ClientHandler(SSLSocket client, String role, String id, String division) {
@@ -19,6 +24,13 @@ public class ClientHandler implements Runnable {
         this.id = id;
         this.division = division;
 
+=======
+
+    public ClientHandler(SSLSocket client, String role, String id) {
+        this.client = client;
+        this.role = role;
+        this.id = id;
+>>>>>>> d763a3188930184ead8d9d8680bb02b5ab891dd0
     }
 
   public void run() {
@@ -36,7 +48,7 @@ public class ClientHandler implements Runnable {
         } else if (role.equals("nurse")) {
             handleNurseRequest(out, in);
         } else if (role.equals("ga")) {
-            handleNurseRequest(out, in);
+            handleGARequest(out, in);
         } else {
             out.println("Error: unknown user");
         }
@@ -48,31 +60,28 @@ public class ClientHandler implements Runnable {
     } catch (IOException e) {
         System.out.println("Client died: " + e.getMessage());
         e.printStackTrace();
-        return;
     }
   }
 
     private void handleNurseRequest(PrintWriter out, BufferedReader in) throws IOException {
         String clientMsg = "";
-        while (clientMsg != "quit") {
+        while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
+
             if (clientMsg.equals("save")) {
                 saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
-                out.println("Choose a command: (read save quit)");
+                out.println("Choose a command: (read | save | quit)");
             }
         }
-
-        }
-
-
+    }
 
     private void handlePatientRequest(PrintWriter out, BufferedReader in) throws IOException {
         String clientMsg = "";
         
-        while (clientMsg != "quit") {
+        while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
             if (clientMsg.equals("yes")) {
                 read(out, in);
@@ -82,26 +91,54 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private void handleDoctorRequest(PrintWriter out, BufferedReader in) {
-        out.println("DoctorTest");
-
+    private void handleDoctorRequest(PrintWriter out, BufferedReader in) throws IOException {
+        String clientMsg = "";
+        while (!clientMsg.equals("quit")) {
+            clientMsg = in.readLine();
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
+            } else if (clientMsg.equals("read")) {
+                read(out, in);
+            } else {
+                out.println("Choose a command: (read | save | quit)");
+            }
+        }
     }
 
+    private void handleGARequest(PrintWriter out, BufferedReader in) throws IOException {
+        String clientMsg = "";
+        while (!clientMsg.equals("quit")) {
+            clientMsg = in.readLine();
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
+            } else if (clientMsg.equals("read")) {
+                read(out, in);
+            } else if(clientMsg.equals("destroy")){
+                destroyRecord(out, in);
+            }else {
+                out.println("Choose a command: (read | save | destroy | quit)");
+            }
+        }
+    }
+
+
     public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
-        out.println("Skapar ett nytt record...;Skriv namn på patient: ");
+        out.println("Creating new record...;Write patient's name: ");
         String patient = in.readLine();
-        System.out.println("patientnamn_DEBUG:" + patient);
-        out.println("Skriv namn på doctor: ");
+        out.println("Write doctor's name: ");
         String doctor = in.readLine();
-        out.println("Skriv namn på nurse: ");
+        out.println("Write nurse's name: ");
         String nurse = in.readLine();
-        out.println("Skriv namn på division: ");
+        out.println("Write division's name: ");
         String division = in.readLine();
-        out.println("Skriv en notering: ");
+        out.println("Write a note: ");
         String note = in.readLine();
         Record record = new Record(patient, doctor, nurse, division, note);
+<<<<<<< HEAD
         record.saveToFile(patient + "Record");
         out.println("Record sparad");
+=======
+>>>>>>> d763a3188930184ead8d9d8680bb02b5ab891dd0
         Date now = new Date();
         Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
         record.saveToFile(patient + ".record");
@@ -111,10 +148,17 @@ public class ClientHandler implements Runnable {
     public void read(PrintWriter out, BufferedReader in) throws IOException {
         try {
             out.println("Who's record do you want to read?");
+<<<<<<< HEAD
             String namn = in.readLine();
             Record record = Record.readRecord("records/" + namn + "Record");
+=======
+            String patient = in.readLine();
+            Record record = Record.readRecord("records/" + patient + ".record");
+>>>>>>> d763a3188930184ead8d9d8680bb02b5ab891dd0
             if (record != null) {
-                out.println(record.toString() +";"+"Press (enter) to go back!");
+                Date now = new Date();
+                Log.generateLog(patient, "IDnbr " + id + " has read this record at timestamp: "+ now);
+                out.println(record +";"+"Press (enter) to go back!");
 
             } else {
                 out.println("File does not exist!");
@@ -124,4 +168,29 @@ public class ClientHandler implements Runnable {
             out.println(e.getMessage());
         }
     }
+<<<<<<< HEAD
+=======
+
+    public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
+        try{
+            out.println("Who's record do you want to destroy?");
+            String patient = in.readLine();
+
+            File file = new File("Records/" + patient + ".record");
+            if(file.delete()){
+                System.out.println("Records of " + patient + " was deleted successfully");
+                out.println("Record deleted;Press (enter) to go back!");
+                Date now = new Date();
+                Log.generateLog(patient, "IDnbr " + id + "has destroyed this record at timestamp: "+ now);
+            } else{
+                System.out.println("Failure in deletion of records of " + patient);
+                out.println("Failure in deletion;Press (enter) to go back!");
+                Date now = new Date();
+                Log.generateLog(patient, "IDnbr " + id + "tried to destroy this record at timestamp: "+ now);
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }
+>>>>>>> d763a3188930184ead8d9d8680bb02b5ab891dd0
 }
