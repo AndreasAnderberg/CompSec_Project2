@@ -110,7 +110,7 @@ public class ClientHandler implements Runnable {
         out.println("Creating new record...;Write patient's name: ");
         String patient = in.readLine();
 
-        if(create || (!create && Record.fileExists("records/" + patient + ".record"))){ //nurses ska inte kunna skapa records
+        if(role.equals("doctor")){
             out.println("Write doctor's name: ");
             String doctor = in.readLine();
             out.println("Write nurse's name: ");
@@ -124,11 +124,13 @@ public class ClientHandler implements Runnable {
             Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
             record.saveToFile(patient + ".record");
             out.println("Record saved");
-        } else {
-            out.println("Access denied or unknown patient");
-        }
+        } else if (role.equals("nurse") && Record.fileExists("records/" + patient + ".record")){
 
+        } else {
+        out.println("Access denied or unknown patient");
+        }
     }
+    private void
 
     public void read(PrintWriter out, BufferedReader in) throws IOException {
 
