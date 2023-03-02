@@ -110,7 +110,7 @@ public class ClientHandler implements Runnable {
         out.println("Creating new record...;Write patient's name: ");
         String patient = in.readLine();
 
-        if(create || (!create && Record.fileExists(patient + ".record"))){ //nurses ska inte kunna skapa records
+        if(create || (!create && Record.fileExists("records/" + patient + ".record"))){ //nurses ska inte kunna skapa records
             out.println("Write doctor's name: ");
             String doctor = in.readLine();
             out.println("Write nurse's name: ");
@@ -125,7 +125,7 @@ public class ClientHandler implements Runnable {
             record.saveToFile(patient + ".record");
             out.println("Record saved");
         } else {
-            out.println("Access denied");
+            out.println("Access denied or unknown patient");
         }
 
     }
