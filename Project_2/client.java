@@ -16,12 +16,12 @@ import java.util.Scanner;
 
 public class client {
   private static final int PORT = 9876;
+  private static Scanner scan = new Scanner(System.in);
 
   public static void main(String[] args) throws Exception {
 
     // Set the truststore using name and location
     System.setProperty("javax.net.ssl.trustStore", "clienttruststore");
-    System.setProperty("javax.net.debug", "handshake");
 
     // Initilize varibles
     // collection of ciphers, protocol versions, trusted certificates, and other TLS options. 
@@ -30,7 +30,6 @@ public class client {
     KeyManagerFactory keyManagerFactory = null;
     KeyStore keyStore = null;
     TrustManagerFactory trustManagerFactory = null;
-    Scanner scan = new Scanner(System.in);
 
 
     // Initilize input varibles 
