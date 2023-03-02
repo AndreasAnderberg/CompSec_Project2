@@ -17,6 +17,7 @@ public class ClientHandler implements Runnable {
         this.role = role;
         this.id = id;
         this.division = division;
+    }
 
   public void run() {
     try {
@@ -54,7 +55,7 @@ public class ClientHandler implements Runnable {
             clientMsg = in.readLine();
 
             if (clientMsg.equals("save")) {
-                saveRecord(out, in);
+                saveRecord(out, in, false);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
@@ -81,7 +82,7 @@ public class ClientHandler implements Runnable {
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
             if (clientMsg.equals("save")) {
-                saveRecord(out, in);
+                saveRecord(out, in, true);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
@@ -94,9 +95,8 @@ public class ClientHandler implements Runnable {
         String clientMsg = "";
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
-            if (clientMsg.equals("save")) {
-                saveRecord(out, in);
-            } else if (clientMsg.equals("read")) {
+
+            if (clientMsg.equals("read")) {
                 read(out, in);
             } else if(clientMsg.equals("destroy")){
                 destroyRecord(out, in);
@@ -106,12 +106,11 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
     public void saveRecord(PrintWriter out, BufferedReader in, boolean create) throws IOException {
         out.println("Creating new record...;Write patient's name: ");
         String patient = in.readLine();
 
-        if(create || (!create && Record.fileExists(patient + ".record"))){
+        if(create || (!create && Record.fileExists(patient + ".record"))){ //nurses ska inte kunna skapa records
             out.println("Write doctor's name: ");
             String doctor = in.readLine();
             out.println("Write nurse's name: ");
