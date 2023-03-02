@@ -1,5 +1,6 @@
 package Project_2.server;
 import Project_2.server.clientHandlers.*;
+import Project_2.server.clientHandlers.NurseHandler;
 
 import java.io.*;
 import java.net.*;
@@ -46,13 +47,13 @@ public class server implements Runnable {
         System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
         System.out.println("creating clientHandler");
-        ClientHandler clientHandler = new ClientHandler(socket, role, id, division);
+        //ClientHandler clientHandler = new ClientHandler(socket, role, id, division);
         switch (role) {
-          case "ga" ->      new Thread(new GAHandler(socket, id, division)).start();
-          case "doctor" ->  new Thread(new DoctorHandler(socket, id, division)).start();
-          case "nurse" ->   new Thread(new NurseHandler(socket, id, division)).start();
-          case "patient" -> new Thread(new PatientHandler(socket, id, division)).start();
-          default ->        throw (new IOException("Role not recognized"));
+          case "ga" :      new Thread(new GAHandler(socket, id, division)).start(); break;
+          case "nurse" :   new Thread(new NurseHandler(socket, id, division)).start();break;
+          case "doctor" :  new Thread(new DoctorHandler(socket, id, division)).start();break;
+          case "patient" : new Thread(new PatientHandler(socket, id, division)).start();break;
+          default :        throw (new IOException("Role not recognized"));
         }
 
       } catch (IOException e) {

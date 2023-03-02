@@ -46,11 +46,6 @@ public class PatientHandler extends Handler{
     }
 
     @Override
-    public void read(PrintWriter out, BufferedReader in) throws IOException {
-        //Not used
-    }
-
-    @Override
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
         //Not used
     }

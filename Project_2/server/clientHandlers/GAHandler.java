@@ -37,38 +37,6 @@ public class GAHandler extends Handler{
     }
 
     @Override
-    public void read(PrintWriter out, BufferedReader in) throws IOException {
-        String idRecord = "init";
-
-        while(!idRecord.equals("back")) {
-            try {
-                out.println("Write idnumber for record you'd like to read: (idnumber | back)");
-                idRecord = in.readLine();
-                Record record = Record.readRecord("records/" + idRecord + ".record");
-                if (record != null) {
-
-                    // Check access controll (patient id num)
-                    checkAccess(idRecord, record);
-
-                    Date now = new Date();
-                    Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
-                    out.println(record +";"+"Press (enter) to go back!");
-                    return;
-
-                } else {
-                    if(idRecord.equals("back")){
-                        return;
-                    }
-                    out.println("File does not exist!");
-                }
-            } catch (NullPointerException e) {
-                out.println(e.getMessage());
-            }
-            idRecord = in.readLine();
-        }
-    }
-
-    @Override
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
         try{
             out.println("Who's record do you want to destroy?");

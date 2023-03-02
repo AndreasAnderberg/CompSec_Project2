@@ -1,5 +1,6 @@
 package Project_2.server.clientHandlers;
 
+import Project_2.server.Log;
 import Project_2.server.Record;
 
 import javax.net.ssl.SSLSocket;
@@ -7,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Date;
 
 public abstract class Handler implements Runnable{
     protected final SSLSocket client;
@@ -39,9 +41,39 @@ public abstract class Handler implements Runnable{
         }
     }
 
+    public void read(PrintWriter out, BufferedReader in) throws IOException{
+        String idRecord = "init";
+
+        while(!idRecord.equals("back")) {
+            try {
+                out.println("Write idnumber for record you'd like to read: (idnumber | back)");
+                idRecord = in.readLine();
+                if(idRecord.equals("back")){
+                    return;
+                }
+                Record record = Record.readRecord("records/" + idRecord + ".record");
+                if (record != null) {
+
+                    // Check access controll (patient id num)
+                    checkAccess(idRecord, record);
+
+                    Date now = new Date();
+                    Log.generateLog(idRecord, "IDnbr " + id + " has read this record at timestamp: "+ now);
+                    out.println(record +";"+"Press (enter) to go back!");
+                    return;
+
+                } else {
+                    out.println("File does not exist!");
+                }
+            } catch (NullPointerException e) {
+                out.println(e.getMessage());
+            }
+            idRecord = in.readLine();
+        }
+    }
+
     protected abstract void handleRequests(PrintWriter out, BufferedReader in) throws IOException;
     public abstract void saveRecord(PrintWriter out, BufferedReader in) throws IOException;
-    public abstract void read(PrintWriter out, BufferedReader in) throws IOException;
     public abstract void destroyRecord(PrintWriter out, BufferedReader in) throws IOException;
     protected abstract boolean checkAccess(String idRecord, Record record);
 }
