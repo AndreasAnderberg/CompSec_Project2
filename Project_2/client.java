@@ -50,6 +50,7 @@ public class client {
         // Set the truststore using name and location
         System.setProperty("javax.net.ssl.trustStore", "clienttruststore");
 
+<<<<<<< HEAD
         inputStream = new FileInputStream("Project_2/clientkeystores/"+username); //clientkeystore funkar
         
         char[] phrase = password.toCharArray();
@@ -79,8 +80,17 @@ public class client {
         PrintWriter  out = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true); // Used to write data to the server over the network
         BufferedReader read = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  // Listen to server's messages
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); // Whats written in the console that will turn into a message
+=======
+        System.out.println("Password: ");
+        password = scan.nextLine();
+
+        //Check if such keystore exists
+        inputStream = new FileInputStream("Project_2/clientkeystores/"+username);
+        foundUser = true;
+>>>>>>> e70ade350c71810518b5ebed1c3fe62e4a082e59
 
       
+<<<<<<< HEAD
         // Start read from server and send. End session by writing "quit"
         // Send and read server's first message. Without this we have to initally send a empty message before we can send...
         out.println(" ");
@@ -88,10 +98,54 @@ public class client {
         System.out.println("Response: " + serverResponse);
         String[] info = serverResponse.split(";");
         System.out.println("Received: ");
+=======
+      keyManagerFactory.init(keyStore, phrase); // This line initializes a key manager that can authenticate the client to the server during the TLS handshake
+      trustManagerFactory.init(keyStore); // Responsible for creating trust managers that can verify the server's digital certificate during the TLS handshake
+      sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null); // Security parameters that are used to establish a secure TLS connection.
+
+      //Create an SSL socket for the (node) client and connect to the server
+      factory = sslContext.getSocketFactory();
+      SSLSocket client = (SSLSocket) factory.createSocket("localhost", PORT);
+
+      // Set up client and start SSL handshake
+      //client.setUseClientMode(true);
+      client.startHandshake();
+
+      // Set up input output streams using NetworkUtility
+      PrintWriter  out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true); // Used to write data to the server over the network
+      BufferedReader read = new BufferedReader(new InputStreamReader(client.getInputStream()));  // Listen to server's messages
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); // Whats written in the console that will turn into a message
+
+
+      // Start read from server and send. End session by writing "quit"
+
+
+      // Send and read server's first message. Without this we have to initally send a empty message before we can send...
+      out.println(" ");
+      String serverResponse = read.readLine();
+      System.out.println("Response: " + serverResponse);
+      String[] info = serverResponse.split(";");
+      System.out.println("Received: ");
+      for (String s : info) {
+          System.out.println(s);
+      }
+
+      // This part is only implemented for sending and recieving messages. 
+      input = in.readLine();
+      while(!input.equals("quit")) {
+        out.println(input); // print and send the input
+        System.out.println("Sent: "+input);
+
+        // Read server's response
+        serverRespons = read.readLine();
+        info = serverRespons.split(";");
+        System.out.println("Received: " + "\n");
+>>>>>>> e70ade350c71810518b5ebed1c3fe62e4a082e59
         for (String s : info) {
             System.out.println(s);
         }
 
+<<<<<<< HEAD
         // This part is only implemented for sending and recieving messages. 
         input = "";
         while(!input.equals("quit")) {
@@ -116,6 +170,9 @@ public class client {
       } catch (Exception e) {
         System.out.print("Authentication failed. Try Again!");
         e.printStackTrace();
+=======
+        input = in.readLine();
+>>>>>>> e70ade350c71810518b5ebed1c3fe62e4a082e59
       }
     }
   }
