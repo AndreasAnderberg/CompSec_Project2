@@ -41,13 +41,12 @@ public class ClientHandler implements Runnable {
     } catch (IOException e) {
         System.out.println("Client died: " + e.getMessage());
         e.printStackTrace();
-        return;
     }
   }
 
     private void handleNurseRequest(PrintWriter out, BufferedReader in) throws IOException {
         String clientMsg = "";
-        while (clientMsg != "quit") {
+        while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
             if (clientMsg.equals("save")) {
                 saveRecord(out, in);
@@ -57,15 +56,12 @@ public class ClientHandler implements Runnable {
                 out.println("Choose a command: (read save quit)");
             }
         }
-
-        }
-
-
+    }
 
     private void handlePatientRequest(PrintWriter out, BufferedReader in) throws IOException {
         String clientMsg = "";
         
-        while (clientMsg != "quit") {
+        while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
             if (clientMsg.equals("yes")) {
                 read(out, in);

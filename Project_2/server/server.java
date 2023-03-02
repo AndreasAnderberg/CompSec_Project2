@@ -27,7 +27,7 @@ public class server implements Runnable {
         SSLSession session = socket.getSession();
         X509Certificate cert = (X509Certificate) session.getPeerCertificates()[0];
 
-        System.out.println(socket.getSession().getCipherSuite());
+        //System.out.println(socket.getSession().getCipherSuite());
 
         //sparar role och id som strings, hämtar från certifikatet med cert.getSubjectX500Principal().getName().
         String subject = cert.getSubjectX500Principal().getName(X500Principal.RFC1779, new Hashtable<>());
