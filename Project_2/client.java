@@ -56,7 +56,7 @@ public class client {
         password = scan.nextLine();
 
         //Check if such keystore exists
-        inputStream = new FileInputStream("Project_2/clientkeystores/"+username); //clientkeystore funkar
+        inputStream = new FileInputStream("Project_2/clientkeystores/"+username);
         foundUser = true;
 
       } catch (FileNotFoundException e) {
@@ -110,9 +110,8 @@ public class client {
       }
 
       // This part is only implemented for sending and recieving messages. 
-      input = "";
+      input = in.readLine();
       while(!input.equals("quit")) {
-        input = in.readLine();
         out.println(input); // print and send the input
         System.out.println("Sent: "+input);
 
@@ -123,6 +122,8 @@ public class client {
         for (String s : info) {
           System.out.println(s);
         }
+
+        input = in.readLine();
       }
 
       // Closes input, output and the socket in order to end the session

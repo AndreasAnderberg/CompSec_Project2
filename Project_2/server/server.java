@@ -42,7 +42,7 @@ public class server implements Runnable {
         System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
         System.out.println("creating clientHandler");
-        ClientHandler clientHandler = new ClientHandler(socket, role);
+        ClientHandler clientHandler = new ClientHandler(socket, role, id);
         new Thread(clientHandler).start();
       } catch (IOException e) {
         System.err.println("Error in connection attempt.");
