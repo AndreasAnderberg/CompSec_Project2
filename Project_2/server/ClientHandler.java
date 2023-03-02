@@ -10,12 +10,13 @@ public class ClientHandler implements Runnable {
     private final SSLSocket client;
     private final String role;
     private final String id;
+    private final String division;
 
-    public ClientHandler(SSLSocket client, String role, String id) {
+    public ClientHandler(SSLSocket client, String role, String id, String division) {
         this.client = client;
         this.role = role;
         this.id = id;
-    }
+        this.division = division;
 
   public void run() {
     try {
@@ -52,12 +53,12 @@ public class ClientHandler implements Runnable {
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
 
-            if (clientMsg.equals("add")) {
-                saveRecord(out, in, false);
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
-                out.println("Choose a command: (read | add | quit)");
+                out.println("Choose a command: (read | save | quit)");
             }
         }
     }
@@ -79,12 +80,12 @@ public class ClientHandler implements Runnable {
         String clientMsg = "";
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
-            if (clientMsg.equals("add")) {
-                saveRecord(out, in, true);
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
-                out.println("Choose a command: (read | add | quit)");
+                out.println("Choose a command: (read | save | quit)");
             }
         }
     }
@@ -93,8 +94,9 @@ public class ClientHandler implements Runnable {
         String clientMsg = "";
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
-
-             if (clientMsg.equals("read")) {
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
+            } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else if(clientMsg.equals("destroy")){
                 destroyRecord(out, in);

@@ -34,15 +34,17 @@ public class server implements Runnable {
         String[] subjectFields = subject.split(",\\s*");
         String id = subjectFields[0].substring(3);
         String role = subjectFields[1].substring(2);
+        String division = subjectFields[2].substring(3);
 
         numConnectedClients++;
         System.out.println("client connected");
         System.out.println("client id (CN field): " + id);
         System.out.println("client role (O field): " + role);
+        System.out.println("client division (S field): " + division);
         System.out.println(numConnectedClients + " concurrent connection(s)\n");
 
         System.out.println("creating clientHandler");
-        ClientHandler clientHandler = new ClientHandler(socket, role, id);
+        ClientHandler clientHandler = new ClientHandler(socket, role, id, division);
         new Thread(clientHandler).start();
       } catch (IOException e) {
         System.err.println("Error in connection attempt.");
