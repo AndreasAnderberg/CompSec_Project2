@@ -1,4 +1,7 @@
-package Project_2.server;
+package Project_2.server.clientHandlers;
+import Project_2.server.Log;
+import Project_2.server.Record;
+
 import java.io.*;
 import java.util.Date;
 import javax.net.ssl.*;
@@ -55,7 +58,7 @@ public class ClientHandler implements Runnable {
             clientMsg = in.readLine();
 
             if (clientMsg.equals("save")) {
-                saveRecord(out, in, false);
+                saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
@@ -82,7 +85,7 @@ public class ClientHandler implements Runnable {
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
             if (clientMsg.equals("save")) {
-                saveRecord(out, in, true);
+                saveRecord(out, in);
             } else if (clientMsg.equals("read")) {
                 read(out, in);
             } else {
@@ -106,35 +109,36 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void saveRecord(PrintWriter out, BufferedReader in, boolean create) throws IOException {
+    public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
         out.println("Creating new record...;Write patient's name: ");
         String patient = in.readLine();
 
         if(role.equals("doctor")){
-            out.println("Write doctor's name: ");
-            String doctor = in.readLine();
-            out.println("Write nurse's name: ");
-            String nurse = in.readLine();
-            out.println("Write division's name: ");
-            String division = in.readLine();
-            out.println("Write a note: ");
-            String note = in.readLine();
-            Record record = new Record(patient, doctor, nurse, division, note);
-            Date now = new Date();
-            Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
-            record.saveToFile(patient + ".record");
-            out.println("Record saved");
+            writeRecord(patient, out, in);
         } else if (role.equals("nurse") && Record.fileExists("records/" + patient + ".record")){
-
+            writeRecord(patient, out, in);
         } else {
         out.println("Access denied or unknown patient");
         }
     }
-    private void
+    private void writeRecord(String patient, PrintWriter out, BufferedReader in) throws IOException {
+        out.println("Write doctor's name: ");
+        String doctor = in.readLine();
+        out.println("Write nurse's name: ");
+        String nurse = in.readLine();
+        out.println("Write division's name: ");
+        String division = in.readLine();
+        out.println("Write a note: ");
+        String note = in.readLine();
+        Record record = new Record(patient, doctor, nurse, division, note);
+        Date now = new Date();
+        Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
+        record.saveToFile(patient + ".record");
+        out.println("Record saved");
+    }
 
     public void read(PrintWriter out, BufferedReader in) throws IOException {
-
-        while(in.readLine() != "back" ) {
+        while(!in.readLine().equals("back")) {
             try {
                 out.println("Write idnumber for record you'd like to read: (idnumber | back)");
                 String idRecord = in.readLine();
