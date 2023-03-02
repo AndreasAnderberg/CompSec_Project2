@@ -1,5 +1,7 @@
 package Project_2.server.clientHandlers;
 
+import Project_2.server.Record;
+
 import javax.net.ssl.SSLSocket;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +25,6 @@ public abstract class Handler implements Runnable{
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-            // Read client message
             System.out.println("Client's role: " + role);
 
             handleRequests(out, in);
@@ -42,4 +43,5 @@ public abstract class Handler implements Runnable{
     public abstract void saveRecord(PrintWriter out, BufferedReader in) throws IOException;
     public abstract void read(PrintWriter out, BufferedReader in) throws IOException;
     public abstract void destroyRecord(PrintWriter out, BufferedReader in) throws IOException;
+    protected abstract boolean checkAccess(String idRecord, Record record);
 }

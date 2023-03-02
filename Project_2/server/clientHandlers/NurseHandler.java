@@ -5,14 +5,13 @@ import Project_2.server.Record;
 
 import javax.net.ssl.SSLSocket;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
-public class GAHandler extends Handler{
-    public GAHandler(SSLSocket client, String id, String division) {
-        super(client, "ga", id, division);
+public class NurseHandler extends Handler{
+    public NurseHandler(SSLSocket client, String id, String division) {
+        super(client, "nurse", id, division);
     }
 
     @Override
@@ -21,19 +20,38 @@ public class GAHandler extends Handler{
         while (!clientMsg.equals("quit")) {
             clientMsg = in.readLine();
 
-            if (clientMsg.equals("read")) {
+            if (clientMsg.equals("save")) {
+                saveRecord(out, in);
+            } else if (clientMsg.equals("read")) {
                 read(out, in);
-            } else if(clientMsg.equals("destroy")){
-                destroyRecord(out, in);
-            }else {
-                out.println("Choose a command: (read | destroy | quit)");
+            } else {
+                out.println("Choose a command: (read | save | quit)");
             }
         }
     }
 
     @Override
     public void saveRecord(PrintWriter out, BufferedReader in) throws IOException {
-        //Not used
+        out.println("Creating new record...;Write patient's name: ");
+        String patient = in.readLine();
+
+        if(Record.fileExists("records/" + patient + ".record")){
+            out.println("Write doctor's name: ");
+            String doctor = in.readLine();
+            out.println("Write nurse's name: ");
+            String nurse = in.readLine();
+            out.println("Write division's name: ");
+            String division = in.readLine();
+            out.println("Write a note: ");
+            String note = in.readLine();
+            Record record = new Record(patient, doctor, nurse, division, note);
+            Date now = new Date();
+            Log.generateLog(patient, "IDnbr " + id + " has added an entry to this record at timestamp: "+ now);
+            record.saveToFile(patient + ".record");
+            out.println("Record saved");
+        } else{
+            out.println("Access denied or unknown patient");
+        }
     }
 
     @Override
@@ -70,25 +88,7 @@ public class GAHandler extends Handler{
 
     @Override
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
-        try{
-            out.println("Who's record do you want to destroy?");
-            String patient = in.readLine();
-
-            File file = new File("Records/" + patient + ".record");
-            if(file.delete()){
-                System.out.println("Records of " + patient + " was deleted successfully");
-                out.println("Record deleted;Press (enter) to go back!");
-                Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + "has destroyed this record at timestamp: "+ now);
-            } else{
-                System.out.println("Failure in deletion of records of " + patient);
-                out.println("Failure in deletion;Press (enter) to go back!");
-                Date now = new Date();
-                Log.generateLog(patient, "IDnbr " + id + "tried to destroy this record at timestamp: "+ now);
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        //Not used
     }
 
     @Override
