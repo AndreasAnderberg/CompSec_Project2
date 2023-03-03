@@ -18,7 +18,7 @@ Each role and individual specified access and allowed actions according to this 
 | Doctor | Read and write to all records associated with the doctor's name and division. Can also read all records associated with the same division. Can create new records for a patient if treating them, and associate a nurse with the record. |
 | Government Agency | Allowed to read and delete all types of records. |
 
-### Username and password for testing
+### Usernames and passwords
 
 | Role    | Name       | ID Number   | Division    | Password      |
 | ------- | ---------- | -----------| -----------| ------------- |
@@ -43,11 +43,17 @@ Run the application and start testning using the following commands in two seper
 
 
 _javac server.java_
+&nbsp;
+
 _java server.java_
 &nbsp;
 
 _javac client.java_
+&nbsp;
+
 _java client.java_
+&nbsp;
+
 
 
 
