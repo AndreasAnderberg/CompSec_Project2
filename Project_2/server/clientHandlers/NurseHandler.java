@@ -14,6 +14,13 @@ public class NurseHandler extends Handler{
     }
 
     @Override
+    protected String[] getAssociate(PrintWriter out, BufferedReader in) throws IOException {
+        out.println("Write doctor's id: ");
+        String doctor = in.readLine();
+        return new String[]{doctor, id};
+    }
+
+    @Override
     protected void handleRequests(PrintWriter out, BufferedReader in) throws IOException {
         String clientMsg = "";
         while (!clientMsg.equals("quit")) {

@@ -74,12 +74,13 @@ public abstract class Handler implements Runnable{
         String patient = in.readLine();
 
         if(checkAccess(Record.readRecord("records/" + patient + ".record"))){
-            out.println("Write doctor's id: ");
-            String doctor = in.readLine();
-            out.println("Write nurse's id: ");
-            String nurse = in.readLine();
-            out.println("Write division's number (1 | 2 | 3): ");
-            String division = in.readLine();
+            //out.println("Write doctor's id: ");
+            //String doctor = in.readLine();
+            //out.println("Write nurse's id: ");
+            //String nurse = in.readLine();s
+            String[] people = getAssociate(out, in);
+            String doctor = people[0];
+            String nurse = people[1];
             out.println("Write a note: ");
             String note = in.readLine();
             Record record = new Record(patient, doctor, nurse, division, note);
@@ -93,6 +94,7 @@ public abstract class Handler implements Runnable{
     }
 
 
+    protected abstract String[] getAssociate(PrintWriter out, BufferedReader in) throws IOException;
     protected abstract void handleRequests(PrintWriter out, BufferedReader in) throws IOException;
     public abstract void destroyRecord(PrintWriter out, BufferedReader in) throws IOException;
     protected abstract boolean checkAccess(Record record);

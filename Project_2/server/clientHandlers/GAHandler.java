@@ -37,6 +37,11 @@ public class GAHandler extends Handler{
     }
 
     @Override
+    protected String[] getAssociate(PrintWriter out, BufferedReader in) throws IOException {
+        return null; //not used
+    }
+
+    @Override
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
         try{
             out.println("Who's record do you want to destroy?");

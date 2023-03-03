@@ -46,6 +46,11 @@ public class PatientHandler extends Handler{
     }
 
     @Override
+    protected String[] getAssociate(PrintWriter out, BufferedReader in) throws IOException {
+        return null; //not used
+    }
+
+    @Override
     public void destroyRecord(PrintWriter out, BufferedReader in) throws IOException {
         //Not used
     }
