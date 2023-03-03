@@ -74,11 +74,11 @@ public abstract class Handler implements Runnable{
         String patient = in.readLine();
 
         if(checkAccess(Record.readRecord("records/" + patient + ".record"))){
-            out.println("Write doctor's name: ");
+            out.println("Write doctor's id: ");
             String doctor = in.readLine();
-            out.println("Write nurse's name: ");
+            out.println("Write nurse's id: ");
             String nurse = in.readLine();
-            out.println("Write division's name: ");
+            out.println("Write division's number (1 | 2 | 3): ");
             String division = in.readLine();
             out.println("Write a note: ");
             String note = in.readLine();
