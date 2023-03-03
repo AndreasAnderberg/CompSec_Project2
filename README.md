@@ -41,11 +41,19 @@ _Divisions available are 1, 2 and 3. Division 0 is only added to client for impl
 Run the application and start testning using the following commands in two seperate terminals:
 &nbsp;
 
+Terminal 2
+&nbsp;
 
 _javac server.java_
 &nbsp;
 
 _java server.java_
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+Terminal 2
 &nbsp;
 
 _javac client.java_
