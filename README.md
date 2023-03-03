@@ -1,9 +1,12 @@
 # CompSec_Project2 - Medical Records and Secure Connections
 
 ## Introduction
-This application assumes that a client (patient, doctor, nurse, or government agency) has unique login details which is used for reading, writing and deleting medical records.
+The hospital's record management system consists of two different applications, a client and a server. These are connected using transport layer security (TLS) which is a protocol for establishing a secure connection between two entities, for instance, a web browser (client) and a website (server). This way of establishing a connection makes it possible to use the record management system through the open network. Our record management system has a role-based access control meaning that the client whether they are patients, nurses, doctors, or government agency the roles will have different access privileges in order to ensure that sensitive or confidential information is protected and that only authorized users can access and manipulate it.
 
-According to this schema, patients, doctors, nurses, and government agencies have access to medical records.
+---
+
+
+In this Java project we uses SSL/TLS protocol for establishing secure connections between a client and a server. The javax.net.ssl library provides the necessary classes and interfaces for secure socket communication, while the java.security library provides the classes and interfaces required for secure key management. The javax.net library provides a set of networking classes for establishing sockets and connections. Additionally, the project requires the use of a KeyStore, which is a storage facility for cryptographic keys and certificates, and X509Certificate, which is a standard for public key certificates.
 
 ##  Instructions
 
