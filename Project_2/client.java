@@ -38,8 +38,9 @@ public class client {
     boolean authenticated = false;
 
     while(!authenticated) {
-        
-      System.out.println("Username: ");
+
+      System.out.println("\nClient started...\n");      
+      System.out.println("Welcome to Medical-Record-Application! \nUsername: ");
       username = scan.nextLine();
 
       System.out.println("Password: ");
